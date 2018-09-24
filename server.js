@@ -1,6 +1,6 @@
 var http = require("http");
 var url = require("url");
-var router = require("./router")
+//var router = require("./router")
 
 function startserver(){
 function onRequest(request, response) {
@@ -8,7 +8,7 @@ function onRequest(request, response) {
   var now = new Date();
   now = now.toLocaleString("ru");
   console.log(now + " Request for http://" + host + ":" + port + pathname + " recieved");
-  router.route(pathname);
+  //router.route(pathname);
   response.writeHead(200, {"Content-Type": "text/plain"});
   response.write("Hello World");
   response.end();
