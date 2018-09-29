@@ -17,5 +17,4 @@ function startserver(route, handle, host, port) {
   console.log("Server started successfully. Listening requests on  " + host + ":" + port + ".");
 }
 
-startserver();
 exports.startserver = startserver
