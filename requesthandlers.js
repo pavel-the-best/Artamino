@@ -1,7 +1,6 @@
 var fs = require('fs');
 
 function start(response) {
-  console.log("Request handler 'start' was called.");
   fs.readFile("./index.html", function(err, data) {
     if (err){
       throw err;
@@ -15,15 +14,14 @@ function start(response) {
   });
 }
 
-function upload(response) {
-  console.log("Request handler 'upload' was called.");
-  fs.readFile("./index.html", function(err, data) {
+function style(response) {
+  fs.readFile("./style.css", function(err, data) {
     if (err){
       throw err;
       console.log(error);
     }
     else {
-      response.writeHead(200, {"Content-Type": "text/html"});
+      response.writeHead(200, {"Content-Type": "text/css"});
       response.write(data.toString('utf-8'));
       response.end();
     }
@@ -31,4 +29,4 @@ function upload(response) {
 }
 
 exports.start = start;
-exports.upload = upload;
+exports.style = style;
