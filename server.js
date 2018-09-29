@@ -1,25 +1,20 @@
 var http = require("http");
 var url = require("url");
-//var router = require("./router")
+var fs = require("fs");
+var router = require("./router.js")
 
-function startserver(){
-function onRequest(request, response) {
-  var pathname = url.parse(request.url).pathname;
-  var now = new Date();
-  now = now.toLocaleString("ru");
-  console.log(now + " Request for http://" + host + ":" + port + pathname + " recieved");
-  //router.route(pathname);
-  response.writeHead(200, {"Content-Type": "text/plain"});
-  response.write("Hello World");
-  response.end();
-}
+function startserver(route, handle, host, port) {
+  function onRequest(request, response) {
+    var pathname = url.parse(request.url).pathname;
+    var now = new Date();
+    now = now.toLocaleString("ru");
+    console.log(now + " Request for http://" + host + ":" + port + pathname + " recieved");
+    route(pathname, handle, response);
+  };
+  var server = http.createServer(onRequest);
+  server.listen(port, host);
 
-var port = 80;
-var host = "127.0.0.1";
-var server = http.createServer(onRequest);
-server.listen(port, host);
-
-console.log("Server started successfully. Listening requests on port " + port + ".");
+  console.log("Server started successfully. Listening requests on  " + host + ":" + port + ".");
 }
 
 startserver();
