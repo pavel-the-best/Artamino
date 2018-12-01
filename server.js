@@ -1,7 +1,7 @@
 var http = require("http");
 var url = require("url");
 var fs = require("fs");
-var router = require("./router.js")
+var router = require("./router.js");
 
 function startserver(route, handle, host, port) {
   function onRequest(request, response) {
@@ -13,8 +13,7 @@ function startserver(route, handle, host, port) {
   };
   var server = http.createServer(onRequest);
   server.listen(port, host);
-
   console.log("Server started successfully. Listening requests on  " + host + ":" + port + ".");
 }
 
-exports.startserver = startserver
+exports.startserver = startserver;

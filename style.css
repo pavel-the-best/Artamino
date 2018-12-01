@@ -1,3 +1,12 @@
-body {
-  background-color: #7b68c7
+body{
+  height: 100%;
+}
+.fullh {
+	height: 100%;
+}
+.fullw {
+	width: 100%;
+}
+.text {
+	font-size: 2.5em;
 }
