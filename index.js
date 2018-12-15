@@ -21,7 +21,7 @@ hostList[6] = "pavelk.herokuapp.com";
 hostList[7] = "185.30.228.140";
 
 var host = hostList[2];
-var port = 80;
+var port = process.env.PORT || 3000;
 
 server.startserver(router.route, handle, host, port);
 
