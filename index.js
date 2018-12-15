@@ -18,8 +18,9 @@ hostList[3] = "10.6.107.184";
 hostList[4] = "192.168.100.93";
 hostList[5] = "172.18.109.182";
 hostList[6] = "pavelk.herokuapp.com";
+hostList[7] = "185.30.228.140";
 
-var host = hostList[6];
+var host = hostList[7];
 var port = 80;
 
 server.startserver(router.route, handle, host, port);
