@@ -4,8 +4,8 @@
   "description": "Мы не знаем, что мы делаем.\r Мы не знаем, зачем мы это делаем.\r Но мы просто делаем это.",
   "main": "index.js",
   "scripts": {
-    "test": "node index.js",
-    "start": "node server.js"
+    "test": "node test.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
