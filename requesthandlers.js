@@ -7,7 +7,7 @@ function start(response) {
       console.log(error);
     }
     else {
-      response.writeHead(200, {"Content-Type": "text/html"});
+      response.writeHead(200, {"Content-Type": "text/html", "Set-Cookie": "user=abracadabra"});
       response.write(data.toString("utf-8"));
       response.end();
     }
@@ -48,15 +48,16 @@ function bootstrapCSS(response) {
 };
 
 async function bootstrapJS(response) {
-  try {
-    data = await fs.readFile("./static/js/bootstrap.js")
+  fs.readFile("./static/js/bootstrap.js", function(err, data) {
+  if (err) {
+	throw err;
+    console.log(err);
+  } else {
     response.writeHead(200, {"Content-Type": "text/css"});
     response.write(data.toString("utf-8"));
     response.end();
-  } catch (err) {
-    throw err;
-    console.log(err);
   };
+  });	 
 };
 
 function bootstrapCSSMap(response) {
