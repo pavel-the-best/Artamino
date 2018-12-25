@@ -1,6 +1,7 @@
-var server = require("./server.js");
-var router = require("./router.js");
-var requestHandlers = require("./requesthandlers.js");
+const server = require("./server.js");
+const router = require("./router.js");
+const requestHandlers = require("./requesthandlers.js");
+const MongoClient = require("mongodb").MongoClient;
 
 var handle = {}
 handle["/"] = requestHandlers.start;
@@ -23,9 +24,28 @@ hostList[6] = "pavelk.herokuapp.com";
 hostList[7] = "185.30.228.140";
 hostList[8] = "0.0.0.0"
 
-var host = hostList[8];
-var port = process.env.PORT || 3000;
+const host = hostList[8];
+const port = process.env.PORT || 3000;
+const url = "mongodb://localhost:27017/";
 
-server.startserver(router.route, handle, host, port);
+var client = undefined;
+var db = undefined;
+var collection = undefined;
 
+
+async function getClient() {
+	var result = client || await MongoClient.connect(url, {useNewUrlParser: true});
+	client = result;
+	return result;
+}
+
+async function getCollection() {
+	await getClient();
+	db = db || client.db("auth");
+	collection = collection || db.collection("user");
+	return collection;
+}
+
+exports.getClient = getClient;
 exports.hostList = hostList;
+exports.getCollection = getCollection;

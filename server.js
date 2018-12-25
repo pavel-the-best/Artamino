@@ -1,7 +1,7 @@
-var http = require("http");
-var url = require("url");
-var fs = require("fs");
-var router = require("./router.js");
+const http = require("http");
+const url = require("url");
+const fs = require("fs");
+const router = require("./router.js");
 
 function startserver(route, handle, host, port) {
   function onRequest(request, response) {

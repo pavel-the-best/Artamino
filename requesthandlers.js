@@ -1,4 +1,4 @@
-var fs = require("fs");
+const fs = require("fs");
 
 function start(response) {
   fs.readFile("./HTML/index.html", function(err, data) {
@@ -57,7 +57,7 @@ async function bootstrapJS(response) {
     response.write(data.toString("utf-8"));
     response.end();
   };
-  });	 
+  });
 };
 
 function bootstrapCSSMap(response) {
