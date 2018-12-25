@@ -37,14 +37,16 @@ async function getClient() {
 	var result = client || await MongoClient.connect(url, {useNewUrlParser: true});
 	client = result;
 	return result;
-}
+};
 
 async function getCollection() {
 	await getClient();
 	db = db || client.db("auth");
 	collection = collection || db.collection("user");
 	return collection;
-}
+};
+
+server.startserver(router.route, handle, host, port);
 
 exports.getClient = getClient;
 exports.hostList = hostList;
