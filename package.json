@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Мы не знаем, что мы делаем.\r Мы не знаем, зачем мы это делаем.\r Но мы просто делаем это.",
   "main": "index.js",
+  "engines": {
+    "node": "10.14.2"
+  },
   "scripts": {
     "test": "node test.js",
     "start": "node index.js"
