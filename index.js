@@ -26,7 +26,7 @@ hostList[8] = "0.0.0.0"
 
 const host = hostList[8];
 const port = process.env.PORT || 3000;
-const url = "mongodb://localhost:27017/";
+const url = 'mongodb+srv://admin:adminPassword@cluster0-br06w.gcp.mongodb.net/'
 
 var client = undefined;
 var db = undefined;
