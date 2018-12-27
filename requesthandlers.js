@@ -1,6 +1,7 @@
 const fs = require("fs");
+const user = require("./user.js")
 
-function start(response) {
+function start(request, response) {
   fs.readFile("./HTML/index.html", function(err, data) {
     if (err){
       throw err;
@@ -14,7 +15,7 @@ function start(response) {
   });
 };
 
-function style(response) {
+function style(request, response) {
   fs.readFile("./static/style.css", function(err, data) {
     if (err){
       throw err;
@@ -28,13 +29,20 @@ function style(response) {
   });
 };
 
-function register(response) {
-  response.writeHead(200, {"Content-Type": "text/plain"});
-  response.write("Oh, this is not written now");
-  response.end();
+function register(request, response) {
+  fs.readFile("./HTML/regr.html", function(err, data) {
+	if (err) {
+      throw err;
+      console.log(err);
+    } else {
+      response.writeHead(200, {"Content-Type": "text/html"});
+      response.write(data.toString("utf-8"));
+      response.end();
+    }
+  });
 };
 
-function bootstrapCSS(response) {
+function bootstrapCSS(request, response) {
   fs.readFile("./static/css/bootstrap.css", function(err, data) {
 	if (err) {
       throw err;
@@ -47,7 +55,7 @@ function bootstrapCSS(response) {
   });
 };
 
-async function bootstrapJS(response) {
+async function bootstrapJS(request, response) {
   fs.readFile("./static/js/bootstrap.js", function(err, data) {
   if (err) {
 	throw err;
@@ -60,7 +68,7 @@ async function bootstrapJS(response) {
   });
 };
 
-function bootstrapCSSMap(response) {
+function bootstrapCSSMap(request, response) {
   fs.readFile("./static/css/bootstrap.css.map", function(err, data) {
     if (err) {
       throw err;
@@ -73,7 +81,7 @@ function bootstrapCSSMap(response) {
   });
 };
 
-function Jquery(response) {
+function Jquery(request, response) {
   fs.readFile("./static/jquery-3.3.1.min.js", function(err, data) {
     if (err) {
       throw err;
@@ -86,6 +94,25 @@ function Jquery(response) {
   });
 };
 
+function regr(request, response) {
+  data = "";
+  request.addListener("data", function(chunk) {
+    data += chunk;
+  });
+  request.addListener("end", async function() {
+    data = data.split("&");
+    d = {};
+    for (i in data) {
+      b = data[i].split("=");
+      d[b[0]] = b[1];
+    };
+    var result = await user.createUser(d["username"], d["password"], d["firstname"], d["lastname"]);
+    response.writeHead(200, {"Content-Type": "text/plain"});
+    response.write(result.toString());
+    response.end();
+  })
+}
+
 exports.start = start;
 exports.style = style;
 exports.register = register;
@@ -93,3 +120,4 @@ exports.bootstrapCSS = bootstrapCSS;
 exports.bootstrapJS = bootstrapJS;
 exports.Jquery = Jquery;
 exports.bootstrapCSSMap = bootstrapCSSMap;
+exports.regr = regr;

@@ -8,8 +8,8 @@ function startserver(route, handle, host, port) {
     var pathname = url.parse(request.url).pathname;
     var now = new Date();
     now = now.toLocaleString("ru");
-    console.log(now + " Request for http://" + host + ":" + port + pathname + " recieved");
-    route(pathname, handle, response);
+    console.log(now + " " + request.method + " Request for http://" + host + ":" + port + pathname + " recieved");
+    route(pathname, handle, request, response);
   };
   var server = http.createServer(onRequest);
   server.listen(port, host);
