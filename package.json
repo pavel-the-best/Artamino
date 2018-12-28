@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "node test.js",
-    "start": "./start.sh"
+    "start": "node index.js"
   },
   "engines": {
     "node": "10.15.0",
@@ -25,6 +25,7 @@
   "dependencies": {
     "bcrypt": "^3.0.2",
     "fs": "0.0.1-security",
+    "html": "^1.0.0",
     "http": "0.0.0",
     "mongodb": "^3.1.10",
     "url": "^0.11.0"
