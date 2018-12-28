@@ -12,6 +12,7 @@ handle["/bootstrap.css"] = requestHandlers.bootstrapCSS;
 handle["/bootstrap.css.map"] = requestHandlers.bootstrapCSSMap;
 handle["/bootstrap.js"] = requestHandlers.bootstrapJS;
 handle["/jquery-3-3-1.min.js"] = requestHandlers.Jquery;
+handle["/regr"] = requestHandlers.regr;
 
 var hostList = [];
 hostList[0] = "192.168.0.115";
@@ -46,6 +47,10 @@ async function getCollection() {
 	return collection;
 };
 
+console.log("Getting client");
+getClient();
+console.log("Getting collection");
+getCollection();
 server.startserver(router.route, handle, host, port);
 
 exports.getClient = getClient;
