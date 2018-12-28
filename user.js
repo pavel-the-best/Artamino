@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const saltRounds = 11;
 
-async function createUser(name, textpassword) {
+async function createUser(name, textpassword, firstname, lastname) {
 	var user = await index.getCollection();
 	const query = {
 		username: name
@@ -13,7 +13,9 @@ async function createUser(name, textpassword) {
 		var hash = await bcrypt.hash(textpassword, saltRounds);
 		const theuser = {
 			username: name,
-			password: hash
+			password: hash,
+			first_name: firstname,
+			last_name: lastname
 		};
 		var result = await user.insertOne(theuser);
 		console.log("user " + name + " successfully created");
