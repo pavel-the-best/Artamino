@@ -11,6 +11,7 @@ handle["/register"] = requestHandlers.register;
 handle["/bootstrap.css"] = requestHandlers.bootstrapCSS;
 handle["/bootstrap.css.map"] = requestHandlers.bootstrapCSSMap;
 handle["/bootstrap.js"] = requestHandlers.bootstrapJS;
+handle["/bootstrap.js.map"] = requestHandlers.bootstrapJSMap;
 handle["/jquery-3-3-1.min.js"] = requestHandlers.Jquery;
 handle["/regr"] = requestHandlers.regr;
 
@@ -27,30 +28,41 @@ hostList[8] = "0.0.0.0"
 
 const host = hostList[8];
 const port = process.env.PORT || 3000;
-const url = process.env.MONGODB_URI;
+const url = process.env.MONGODB_URI || "mongodb://localhost:27017/";
 
 var client = undefined;
 var db = undefined;
-var collection = undefined;
+var collections = {};
 
 
 async function getClient() {
-	var result = client || await MongoClient.connect(url, {useNewUrlParser: true});
-	client = result;
-	return result;
+	try {
+		var result = client || await MongoClient.connect(url, {useNewUrlParser: true});
+		client = result;
+		return result;
+	} catch(err) {
+		throw err;
+	}
 };
 
-async function getCollection() {
-	await getClient();
-	db = db || client.db("auth");
-	collection = collection || db.collection("user");
-	return collection;
+async function getCollection(name) {
+	try {
+		await getClient();
+		db = db || client.db("auth");
+		if (name in collections) {
+			return collections[name];
+		} else {
+			collections[name] = await db.collection(name);
+			return collections[name];
+		}
+	} catch(err) {
+		throw err;
+	}
 };
 
-console.log("Getting client");
 getClient();
-console.log("Getting collection");
-getCollection();
+getCollection("user");
+getCollection("auth");
 server.startserver(router.route, handle, host, port);
 
 exports.getClient = getClient;

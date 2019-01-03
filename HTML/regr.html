@@ -47,9 +47,9 @@
 						<div class="input-group mb-2">
 							<input type="text" class="form-control" name="lastname" placeholder="Enter your last name" id="lastname">
 						</div>
+						<div id="alert_placeholder">
+						</div>
 						<input type="submit" class="btn btn-primary" value="Submit" id="submit">
-					</div>
-					<div id="alert_placeholder">
 					</div>
 				</div>
 		</div>
@@ -89,8 +89,10 @@
 				}
 			});
 			function showAlert(alertClass, alertMessage) {
-				$("#alert_placeholder")[0].innerHTML = '<div class="alert ' + alertClass + '" role="alert"><strong>' + alertMessage + '</strong></div>';
-			};
+				$("#alert_placeholder")[0].innerHTML = "\n\
+					<div class=\"alert " + alertClass + "\" role=\"alert\">\n\
+					<strong>" + alertMessage + "</strong>\n</div>"
+				};
 		</script>
 	</body>
 </html>

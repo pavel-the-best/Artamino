@@ -81,6 +81,19 @@ function bootstrapCSSMap(request, response) {
   });
 };
 
+function bootstrapJSMap(request, response) {
+  fs.readFile("./static/js/bootstrap.js.map", function(err, data) {
+    if (err) {
+      throw err;
+      console.log(err);
+    } else {
+      response.writeHead(200, {"Content-Type": "text/css"});
+      response.write(data.toString("utf-8"));
+      response.end();
+    }
+  });
+}
+
 function Jquery(request, response) {
   fs.readFile("./static/jquery-3.3.1.min.js", function(err, data) {
     if (err) {
@@ -90,7 +103,7 @@ function Jquery(request, response) {
       response.writeHead(200, {"Content-Type": "text/css"});
       response.write(data.toString("utf-8"));
       response.end();
-    }
+    };
   });
 };
 
@@ -106,11 +119,15 @@ function regr(request, response) {
       b = data[i].split("=");
       d[b[0]] = b[1];
     };
-    var result = await user.createUser(d["username"], d["password"], d["firstname"], d["lastname"]);
     response.writeHead(200, {"Content-Type": "text/plain"});
-    response.write(result.toString());
+    if ("username" in d && "password" in d && "firstname" in d && "lastname" in d) {
+      var result = await user.createUser(request, d["username"], d["password"], d["firstname"], d["lastname"]);
+      response.write(result.toString());
+    } else {
+      response.write("1");
+    };
     response.end();
-  })
+  });
 }
 
 exports.start = start;
@@ -120,4 +137,5 @@ exports.bootstrapCSS = bootstrapCSS;
 exports.bootstrapJS = bootstrapJS;
 exports.Jquery = Jquery;
 exports.bootstrapCSSMap = bootstrapCSSMap;
+exports.bootstrapJSMap = bootstrapJSMap;
 exports.regr = regr;
