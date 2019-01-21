@@ -75,15 +75,14 @@
 							lastname: lname
 						},
 						success: function(data, textStatus) {
-							if (textStatus == "success") {
-								if (data == 0) {
-									showAlert("alert-success", "Registration successfull");
-								} else {
-									showAlert("alert-warning", "Such username already exists");
-								}
+							if (data == 0) {
+								showAlert("alert-success", "Registration successfull");
 							} else {
-								showAlert("alert-error", "Failed connection, status: " + textStatus)
+								showAlert("alert-warning", "Such username already exists");
 							}
+						},
+						error: function(data, textStatus) {
+							showAlert("alert-error", "Failed connection, status: " + textStatus)
 						}
 					})
 				}

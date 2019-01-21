@@ -1,17 +1,16 @@
 const http = require("http");
 const url = require("url");
-const fs = require("fs");
 const router = require("./router.js");
 
 function startserver(route, handle, host, port) {
   function onRequest(request, response) {
-    var pathname = url.parse(request.url).pathname;
-    var now = new Date();
-    now = now.toLocaleString("ru");
+    const pathname = url.parse(request.url).pathname;
+    const d = new Date();
+    const now = d.toLocaleString("ru");
     console.log(now + " " + request.method + " Request for http://" + host + ":" + port + pathname + " recieved");
-    route(pathname, handle, request, response);
+    router.route(pathname, handle, request, response);
   };
-  var server = http.createServer(onRequest);
+  const server = http.createServer(onRequest);
   server.listen(port, host);
   console.log("Server started successfully. Listening requests on  " + host + ":" + port + ".");
 }

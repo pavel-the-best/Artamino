@@ -27,7 +27,7 @@ hostList[7] = "185.30.228.140";
 hostList[8] = "0.0.0.0"
 
 const host = hostList[8];
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 const url = process.env.MONGODB_URI || "mongodb://localhost:27017/";
 
 var client = undefined;
@@ -62,7 +62,7 @@ async function getCollection(name) {
 
 getClient();
 getCollection("user");
-getCollection("auth");
+getCollection("session");
 server.startserver(router.route, handle, host, port);
 
 exports.getClient = getClient;
