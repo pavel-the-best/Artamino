@@ -1,6 +1,17 @@
 const index = require("./index.js")
 const bcrypt = require("bcrypt");
 
+function parseCookies (request) {
+    cookies = request.headers.cookie;
+    cookies.split(';');
+    d = {};
+    for (i in cookies) {
+      cur = cookies[i].split('=');
+      d[cur[0]] = cur[1];
+    }
+    return d;
+}
+
 const saltRounds = 11;
 
 async function createUser(request, name, textpassword, firstname, lastname) {
@@ -42,6 +53,31 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 	}
 };
 
+async function checkCookie(request) {
+	try {
+		var db = await index.getCollection("session");
+		var c = parseCookies(request);
+		if ("cookie" in c) {
+			const query = {
+				cookie: cookie
+			};
+			var searchresult = await db.find(query).toArray();
+			if (searchresult.length != 0) {
+				if (cookie == searchresult[0]["cookie"]) {
+					return searchresult[0]["user"];
+				} else {
+					return 1;
+				};
+			};
+		} else {
+			return 1;
+		}
+	} catch (e) {
+		throw err;
+		return -1;
+	}
+}
+
 async function checkPassword(request, name, passwordtocheck) {
 	try {
 		var user = await index.getCollection("user");
@@ -50,10 +86,13 @@ async function checkPassword(request, name, passwordtocheck) {
 		};
 		var searchresult = await user.find(query).toArray();
 		if (searchresult.length != 0) {
-			result = await bcrypt.compare(passwordtocheck, searchresult[0]["password"]);
+			var result = await bcrypt.compare(passwordtocheck, searchresult[0]["password"]);
 		};
 		if (result) {
 			return 0;
+		  response.writeHead(200, {
+		    'Set-Cookie': '=test'
+		  });
 		} else {
 			return 1;
 		};
