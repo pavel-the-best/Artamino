@@ -8,12 +8,14 @@ handle["/"] = requestHandlers.start;
 handle["/start"] = requestHandlers.start;
 handle["/style.css"] = requestHandlers.style;
 handle["/register"] = requestHandlers.register;
+handle["/login"] = requestHandlers.login;
 handle["/bootstrap.css"] = requestHandlers.bootstrapCSS;
 handle["/bootstrap.css.map"] = requestHandlers.bootstrapCSSMap;
 handle["/bootstrap.js"] = requestHandlers.bootstrapJS;
 handle["/bootstrap.js.map"] = requestHandlers.bootstrapJSMap;
 handle["/jquery-3-3-1.min.js"] = requestHandlers.Jquery;
 handle["/regr"] = requestHandlers.regr;
+handle["/logn"] = requestHandlers.logn;
 
 var hostList = [];
 hostList[0] = "192.168.0.115";

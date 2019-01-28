@@ -31,7 +31,20 @@ function style(request, response) {
 
 function register(request, response) {
   fs.readFile("./HTML/regr.html", function(err, data) {
-	if (err) {
+    if (err) {
+      throw err;
+      console.log(err);
+    } else {
+      response.writeHead(200, {"Content-Type": "text/html"});
+      response.write(data.toString("utf-8"));
+      response.end();
+    }
+  });
+};
+
+function login(request, response) {
+  fs.readFile("./HTML/logn.html", function(err, data) {
+    if (err) {
       throw err;
       console.log(err);
     } else {
@@ -130,12 +143,37 @@ function regr(request, response) {
   });
 }
 
+function logn(request, response) {
+  data = "";
+  request.addListener("data", function(chunk) {
+    data += chunk;
+  });
+  request.addListener("end", async function() {
+    data = data.split("&");
+    d = {};
+    for (i in data) {
+      b = data[i].split("=");
+      d[b[0]] = b[1];
+    };
+    response.writeHead(200, {"Content-Type": "text/plain"});
+    if ("username" in d && "password" in d) {
+      var result = await user.checkPassword(request, d["username"], d["password"]);
+      response.write(result.toString());
+    } else {
+      response.write("1");
+    };
+    response.end();
+  });
+}
+
 exports.start = start;
 exports.style = style;
 exports.register = register;
+exports.login = login;
 exports.bootstrapCSS = bootstrapCSS;
 exports.bootstrapJS = bootstrapJS;
 exports.Jquery = Jquery;
 exports.bootstrapCSSMap = bootstrapCSSMap;
 exports.bootstrapJSMap = bootstrapJSMap;
 exports.regr = regr;
+exports.logn = logn;

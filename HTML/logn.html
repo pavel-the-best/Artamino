@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Registration</title>
+		<title>Login</title>
 		<link rel="stylesheet" type="text/css" href="bootstrap.css">
 		<script src="jquery-3-3-1.min.js"></script>
 		<script src="bootstrap.js"></script>
@@ -19,14 +19,15 @@
 				<div class="collapse navbar-collapse" id="navbarNav">
 			    <div class="navbar-nav">
 		        <a class="nav-item nav-link" href="/">Home</a>
-		        <a class="nav-item nav-link active" href="#">Register <span class="sr-only">(current)</span></a>
+		        <a class="nav-item nav-link" href="/register">Register</a>
+			        <a class="nav-item nav-link active" href="#">Login <span class="sr-only">(current)</span></a>
 			    </div>
 			  </div>
 			</nav>
 			<div class="d-flex fullh fullw justify-content-center align-items-center">
 				<div class="col-lg-6 col-xs-6 col-xs-12">
 					<div>
-						<h3>Registration</h3>
+						<h3>Login</h3>
 					</div>
 					<div class="form-group">
 						<div class="input-group mb-2">
@@ -41,12 +42,6 @@
 							</div>
 							<input type="password" class="form-control" name="password" placeholder="Enter your password" id="password">
 						</div>
-						<div class="input-group mb-2">
-							<input type="text" class="form-control" name="firstname" placeholder="Enter your first name" id="firstname">
-						</div>
-						<div class="input-group mb-2">
-							<input type="text" class="form-control" name="lastname" placeholder="Enter your last name" id="lastname">
-						</div>
 						<div id="alert_placeholder">
 						</div>
 						<input type="submit" class="btn btn-primary" value="Submit" id="submit">
@@ -56,33 +51,29 @@
 		</div>
 		<script>
 			$("#submit").click(function() {
-				if (!($("#username")[0].value.length && $("#password")[0].value.length && $("#firstname")[0].value.length && $("#lastname")[0].value.length)) {
+				if (!($("#username")[0].value.length && $("#password")[0].value.length)) {
 					showAlert("alert-warning", "All fields are required");
 				} else {
 					$(".alert").alert("close");
 					const name = $("#username")[0].value;
 					const psswd = $("#password")[0].value;
-					const fname = $("#firstname")[0].value;
-					const lname = $("#lastname")[0].value;
 					$.ajax({
-						url: "/regr",
+						url: "/logn",
 						method: "POST",
 						dataType: "json",
 						data: {
 							username: name,
-							password: psswd,
-							firstname: fname,
-							lastname: lname
+							password: psswd
 						},
 						success: function(data, textStatus) {
 							if (data == 0) {
-								showAlert("alert-success", "Registration successfull");
+								showAlert("alert-success", "Login successfull");
 							} else {
-								showAlert("alert-warning", "Such username already exists");
+								showAlert("alert-warning", "Wrong credentials");
 							}
 						},
 						error: function(data, textStatus) {
-							showAlert("alert-error", "Failed connection, status: " + textStatus)
+							showAlert("alert-error", "Failed connection, check console")
 						}
 					})
 				}
