@@ -42,26 +42,25 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 	}
 };
 
-async function checkPassword(name, passwordtocheck) {
+async function checkPassword(request, name, passwordtocheck) {
 	try {
-		var user = await index.getCollection("user")
-		var query = {
+		var user = await index.getCollection("user");
+		const query = {
 			username: name
 		};
-		try {
-			var searchresult = await user.find(query).toArray();
-			if (searchresult.length > 0) {
-				allresult = await bcrypt.compare(passwordtocheck, searchresult[0]["password"]);
-			} else {
-				allresult = false;
-			};
-			return(allresult);
-		} catch(err) {
-			throw err;
-		}
+		var searchresult = await user.find(query).toArray();
+		if (searchresult.length != 0) {
+			result = await bcrypt.compare(passwordtocheck, searchresult[0]["password"]);
+		};
+		if (result) {
+			return 0;
+		} else {
+			return 1;
+		};
 	} catch(err) {
-		throw(err);
-	};
+		throw err;
+		return -1;
+	}
 };
 
 
