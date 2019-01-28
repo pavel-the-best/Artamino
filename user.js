@@ -44,12 +44,12 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 
 async function checkPassword(name, passwordtocheck) {
 	try {
-		var user = await index.getCollection()
+		var user = await index.getCollection("user")
 		var query = {
 			username: name
 		};
 		try {
-			var searchresult = await user.find(query).limit(1).toArray();
+			var searchresult = await user.find(query).toArray();
 			if (searchresult.length > 0) {
 				allresult = await bcrypt.compare(passwordtocheck, searchresult[0]["password"]);
 			} else {
