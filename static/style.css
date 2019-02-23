@@ -1,13 +1,7 @@
-.fullh {
-	height: 100%;
-}
-.fullw {
-	width: 100%;
-}
 .text {
 	font-size: 2.5em;
 }
-.theinputgroup{
-  margin: 1em;
-  margin-bottom: 0.25em;
+
+.theInputGroup{
+	margin: 1em 1em 0.25em;
 }
