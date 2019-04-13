@@ -63,7 +63,7 @@ async function checkCookie(request) {
 			const ipAddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || "ERR";
 			var searchresult = await db.find(query).toArray();
 			if (searchresult.length != 0) {
-				return c["auth"]
+				return c["auth"];
 			} else {
 			    return 0;
 			}
@@ -79,6 +79,8 @@ async function checkCookie(request) {
 async function checkPassword(request, name, passwordtocheck) {
 	try {
 	    var res1 = await checkCookie(request);
+	    console.log(res1);
+	    console.log(res1.length < 3);
 	    if (res1.length < 3) {
 		    var user = await index.getCollection("user");
 		    const query = {
@@ -97,8 +99,8 @@ async function checkPassword(request, name, passwordtocheck) {
 		    return 0;
 		}
 	} catch(err) {
-		return -1;
 		throw err;
+		return -1;
 	}
 };
 
