@@ -1,13 +1,14 @@
 const index = require("./index.js")
 const bcrypt = require("bcrypt");
+var ObjectId = require("mongodb").ObjectId;
 
 function parseCookies (request) {
     cookies = request.headers.cookie;
-    cookies.split(';');
+    cookies = cookies.split(';');
     d = {};
     for (i in cookies) {
       cur = cookies[i].split('=');
-      d[cur[0]] = cur[1];
+      d[cur[0].trim()] = cur[1].trim();
     }
     return d;
 }
@@ -55,9 +56,9 @@ async function checkCookie(request) {
 	try {
 		var db = await index.getCollection("auth");
 		var c = parseCookies(request);
-		if ("auth" in c.keys()) {
+		if ("auth" in c) {
 			const query = {
-				user_id: c["auth"],
+				user_id: ObjectId(c["auth"]),
 				user_agent: request.headers['user-agent']
 			};
 			var searchresult = await db.find(query).toArray();
@@ -79,8 +80,6 @@ async function checkPassword(request, name, passwordtocheck) {
 	try {
 	    var res1 = await checkCookie(request);
 	    res1 = res1.toString();
-	    console.log(res1);
-	    console.log(res1.length < 3);
 	    if (res1.length < 3) {
 		    var user = await index.getCollection("user");
 		    const query = {
