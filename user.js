@@ -58,7 +58,7 @@ async function checkCookie(request) {
 		if ("auth" in c.keys) {
 			const query = {
 				user_id: c["auth"],
-				user_agent = request.headers['user-agent']
+				user_agent: request.headers['user-agent']
 			};
 			const ipAddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || "ERR";
 			var searchresult = await db.find(query).toArray();
