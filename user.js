@@ -60,7 +60,6 @@ async function checkCookie(request) {
 				user_id: c["auth"],
 				user_agent: request.headers['user-agent']
 			};
-			const ipAddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || "ERR";
 			var searchresult = await db.find(query).toArray();
 			if (searchresult.length != 0) {
 				return c["auth"];
@@ -71,8 +70,8 @@ async function checkCookie(request) {
 			return 0;
 		}
 	} catch (err) {
-	    return -1;
 	    throw err;
+	    return -1;
 	}
 }
 
