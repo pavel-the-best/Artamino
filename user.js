@@ -33,10 +33,8 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			await user.insertOne(theuser);
 			console.log("user " + name + " successfully created");
 			var auth = index.getCollection("auth");
-			const ipAddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || "ERR";
 			const u_a = request.headers['user-agent'];
 			const authQuery = {
-				ip: ipAddress,
 				user_agent: u_a,
 				user_id: theuser._id
 			};
@@ -90,6 +88,13 @@ async function checkPassword(request, name, passwordtocheck) {
 		    	var result = await bcrypt.compare(passwordtocheck, searchresult[0]["password"]);
 		    };
 		    if (result) {
+		        const u_a = request.headers['user-agent'];
+		        const query = {
+		            user_id: searchresult[0]["_id"],
+		            user_agent: u_a
+		        };
+		        var auth = await index.getCollection("auth");
+		        await auth.insertOne(query);
 		    	return 0;
 		    } else {
 		    	return 1;
