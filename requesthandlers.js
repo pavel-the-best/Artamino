@@ -135,7 +135,7 @@ function regr(request, response) {
     if ("username" in d && "password" in d && "firstname" in d && "lastname" in d) {
       var result = await user.createUser(request, d["username"], d["password"], d["firstname"], d["lastname"]);
       result = result.toString()
-      if len(result) > 2 {
+      if (len(result) > 2) {
         response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result});
         response.write("0")
       } else {
