@@ -36,8 +36,8 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			const u_a = request.headers['user-agent'];
 			var hashed = await bcrypt.hash(ipAddress + hashP + u_a, saltRounds);
 			const authQuery = {
-				ip: request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || "ERR",
-				user_agent: request.headers['user-agent'],
+				ip: ipAdress,
+				user_agent: u_a,
 				hash: hashed,
 				user_id: theuser._id
 			};
@@ -72,9 +72,9 @@ async function checkCookie(request) {
 		} else {
 			return 1;
 		}
-	} catch (e) {
-		throw err;
-		return -1;
+	} catch (err) {
+	    return -1;
+	    throw err;
 	}
 }
 
@@ -97,8 +97,8 @@ async function checkPassword(request, name, passwordtocheck) {
 			return 1;
 		};
 	} catch(err) {
-		throw err;
 		return -1;
+		throw err;
 	}
 };
 
