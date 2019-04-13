@@ -68,7 +68,7 @@ async function checkCookie(request) {
 			    return 0;
 			}
 		} else {
-			return 1;
+			return 0;
 		}
 	} catch (err) {
 	    return -1;
@@ -78,7 +78,8 @@ async function checkCookie(request) {
 
 async function checkPassword(request, name, passwordtocheck) {
 	try {
-	    if (checkCookie(request).toString().length < 3) {
+	    var res1 = await checkCookie(request);
+	    if (res1.length < 3) {
 		    var user = await index.getCollection("user");
 		    const query = {
 			    username: name
