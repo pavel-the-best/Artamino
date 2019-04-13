@@ -48,8 +48,8 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			return 1;
 		};
 	} catch(err) {
-		return -1;
 		throw err;
+		return -1;
 	}
 };
 
@@ -74,6 +74,7 @@ async function checkCookie(request) {
 		}
 	} catch (err) {
 	    return -1;
+	    console.log(err);
 	    throw err;
 	}
 }
@@ -90,9 +91,6 @@ async function checkPassword(request, name, passwordtocheck) {
 		};
 		if (result) {
 			return 0;
-		  response.writeHead(200, {
-		    'Set-Cookie': '=test'
-		  });
 		} else {
 			return 1;
 		};

@@ -79,11 +79,11 @@
 							} else if (data == 1) {
 								showAlert("alert-warning", "Such username already exists");
 							} else if (data == -1) {
-							    showAlert("alert-error", "Internal server error");
+							    showAlert("alert-danger", "Internal server error");
 							}
 						},
 						error: function(data, textStatus) {
-							showAlert("alert-error", "Failed connection, check console")
+							showAlert("alert-danger", "Failed connection, check console")
 						}
 					})
 				}
