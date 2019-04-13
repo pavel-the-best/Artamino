@@ -78,7 +78,7 @@ async function checkCookie(request) {
 
 async function checkPassword(request, name, passwordtocheck) {
 	try {
-	    if (checkCookie(request) == 0 || checkCookie(request) == -1) {
+	    if (checkCookie(request).toString().length < 3) {
 		    var user = await index.getCollection("user");
 		    const query = {
 			    username: name
