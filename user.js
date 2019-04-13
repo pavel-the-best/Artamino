@@ -79,6 +79,7 @@ async function checkCookie(request) {
 async function checkPassword(request, name, passwordtocheck) {
 	try {
 	    var res1 = await checkCookie(request);
+	    res1 = res1.toString();
 	    console.log(res1);
 	    console.log(res1.length < 3);
 	    if (res1.length < 3) {
