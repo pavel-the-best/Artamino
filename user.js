@@ -41,7 +41,7 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			};
 			var auth = await auth;
 			await auth.insertOne(authQuery);
-			return user_id;
+			return theuser._id;
 		} else {
 			return 1;
 		};
