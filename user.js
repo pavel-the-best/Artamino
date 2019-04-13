@@ -55,7 +55,7 @@ async function checkCookie(request) {
 	try {
 		var db = await index.getCollection("auth");
 		var c = parseCookies(request);
-		if ("auth" in c.keys) {
+		if ("auth" in c.keys()) {
 			const query = {
 				user_id: c["auth"],
 				user_agent: request.headers['user-agent']
