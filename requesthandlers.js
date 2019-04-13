@@ -132,12 +132,19 @@ function regr(request, response) {
       b = data[i].split("=");
       d[b[0]] = b[1];
     };
-    response.writeHead(200, {"Content-Type": "text/plain"});
     if ("username" in d && "password" in d && "firstname" in d && "lastname" in d) {
       var result = await user.createUser(request, d["username"], d["password"], d["firstname"], d["lastname"]);
-      response.write(result.toString());
+      result = result.toString()
+      if len(result) > 2 {
+        response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result});
+        response.write("0")
+      } else {
+        response.writeHead(200, {"Content-Type": "text/plain"})
+        response.write(result)
+      }
     } else {
-      response.write("1");
+      response.writeHead(500, {"Content-Type": "text/plain"})
+      response.write("-1");
     };
     response.end();
   });

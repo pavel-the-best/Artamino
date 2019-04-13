@@ -41,7 +41,7 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			};
 			var auth = await auth;
 			await auth.insertOne(authQuery);
-			return 0;
+			return user_id;
 		} else {
 			return 1;
 		};
@@ -58,7 +58,7 @@ async function checkCookie(request) {
 		if ("auth" in c.keys) {
 			const query = {
 				user_id: c["auth"],
-				const u_a = request.headers['user-agent']
+				user_agent = request.headers['user-agent']
 			};
 			const ipAddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || "ERR";
 			var searchresult = await db.find(query).toArray();
