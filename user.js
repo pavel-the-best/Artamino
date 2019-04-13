@@ -34,11 +34,9 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			var auth = index.getCollection("auth");
 			const ipAddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || "ERR";
 			const u_a = request.headers['user-agent'];
-			var hashed = await bcrypt.hash(ipAddress + hashP + u_a, saltRounds);
 			const authQuery = {
 				ip: ipAddress,
 				user_agent: u_a,
-				hash: hashed,
 				user_id: theuser._id
 			};
 			var auth = await auth;
@@ -55,45 +53,48 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 
 async function checkCookie(request) {
 	try {
-		var db = await index.getCollection("session");
+		var db = await index.getCollection("auth");
 		var c = parseCookies(request);
-		if ("cookie" in c) {
+		if ("auth" in c.keys) {
 			const query = {
-				cookie: cookie
+				user_id: c["auth"],
+				const u_a = request.headers['user-agent']
 			};
+			const ipAddress = request.headers['x-forwarded-for'] || request.connection.remoteAddress || request.socket.remoteAddress || "ERR";
 			var searchresult = await db.find(query).toArray();
 			if (searchresult.length != 0) {
-				if (cookie == searchresult[0]["cookie"]) {
-					return searchresult[0]["user"];
-				} else {
-					return 1;
-				};
-			};
+				return c["auth"]
+			} else {
+			    return 0;
+			}
 		} else {
 			return 1;
 		}
 	} catch (err) {
 	    return -1;
-	    console.log(err);
 	    throw err;
 	}
 }
 
 async function checkPassword(request, name, passwordtocheck) {
 	try {
-		var user = await index.getCollection("user");
-		const query = {
-			username: name
-		};
-		var searchresult = await user.find(query).toArray();
-		if (searchresult.length != 0) {
-			var result = await bcrypt.compare(passwordtocheck, searchresult[0]["password"]);
-		};
-		if (result) {
-			return 0;
+	    if (checkCookie(request) == 0 || checkCookie(request) == -1) {
+		    var user = await index.getCollection("user");
+		    const query = {
+			    username: name
+		    };
+		    var searchresult = await user.find(query).toArray();
+		    if (searchresult.length != 0) {
+		    	var result = await bcrypt.compare(passwordtocheck, searchresult[0]["password"]);
+		    };
+		    if (result) {
+		    	return 0;
+		    } else {
+		    	return 1;
+		    };
 		} else {
-			return 1;
-		};
+		    return 0;
+		}
 	} catch(err) {
 		return -1;
 		throw err;
