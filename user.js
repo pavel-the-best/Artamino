@@ -36,7 +36,7 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			const u_a = request.headers['user-agent'];
 			var hashed = await bcrypt.hash(ipAddress + hashP + u_a, saltRounds);
 			const authQuery = {
-				ip: ipAdress,
+				ip: ipAddress,
 				user_agent: u_a,
 				hash: hashed,
 				user_id: theuser._id
