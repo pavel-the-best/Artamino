@@ -162,10 +162,21 @@ function logn(request, response) {
       b = data[i].split("=");
       d[b[0]] = b[1];
     };
-    response.writeHead(200, {"Content-Type": "text/plain"});
     if ("username" in d && "password" in d) {
       var result = await user.checkPassword(request, d["username"], d["password"]);
-      response.write(result.toString());
+      if (result.toString().length > 2) {
+        response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result.toString()});
+        response.write("0");
+      } else if (result == 0) {
+        response.writeHead(200, {"Content-Type": "text/plain"});
+        response.write("0");
+      } else if (result == -1) {
+        response.writeHead(500, {"Content-Type": "text/plain"})
+        response.write("-1")
+      } else if (result == 1) {
+        response.writeHead(200, {"Content-Type": "text/plain"})
+        response.write("1")
+      }
     } else {
       response.write("1");
     };

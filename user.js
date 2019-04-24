@@ -39,13 +39,13 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 				user_id: theuser._id
 			};
 			var auth = await auth;
-			await auth.insertOne(authQuery);
-			return theuser._id;
+			var res = await auth.insertOne(authQuery);
+			console.log(res.insertedId);
+			return res.insertedId;
 		} else {
 			return 1;
 		};
 	} catch(err) {
-		throw err;
 		return -1;
 	}
 };
@@ -55,13 +55,13 @@ async function checkCookie(request) {
 		var db = await index.getCollection("auth");
 		var c = parseCookies(request);
 		if ("auth" in c) {
-			const query = {
-				user_id: ObjectId(c["auth"]),
+			var query = {
+				_id: ObjectId(c["auth"]),
 				user_agent: request.headers['user-agent']
 			};
 			var searchresult = await db.find(query).toArray();
 			if (searchresult.length != 0) {
-				return c["auth"];
+			    return searchresult[0]["user_id"]
 			} else {
 			    return 0;
 			}
@@ -69,7 +69,6 @@ async function checkCookie(request) {
 			return 0;
 		}
 	} catch (err) {
-	    throw err;
 	    return -1;
 	}
 }
@@ -94,8 +93,8 @@ async function checkPassword(request, name, passwordtocheck) {
 		            user_agent: u_a
 		        };
 		        var auth = await index.getCollection("auth");
-		        await auth.insertOne(query);
-		    	return 0;
+		        var res = await auth.insertOne(query);
+		    	return res.insertedId;
 		    } else {
 		    	return 1;
 		    };
@@ -103,7 +102,6 @@ async function checkPassword(request, name, passwordtocheck) {
 		    return 0;
 		}
 	} catch(err) {
-		throw err;
 		return -1;
 	}
 };

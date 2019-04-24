@@ -30,7 +30,7 @@ hostList[8] = "0.0.0.0"
 
 const host = hostList[8];
 const port = process.env.PORT || 8080;
-const url = process.env.MONGODB_URI || "mongodb://localhost:27017/";
+const url = "mongodb://localhost:27017/";
 
 var client = undefined;
 var db = undefined;

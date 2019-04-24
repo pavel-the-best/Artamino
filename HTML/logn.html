@@ -7,7 +7,7 @@
 		<script src="bootstrap.js"></script>
 		<link rel="stylesheet" type ="text/css" href="style.css">
 		<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 	</head>
 	<body>
 		<div class="container-fluid">
@@ -66,8 +66,10 @@
 						success: function(data, textStatus) {
 							if (data == 0) {
 								showAlert("alert-success", "Login successfull");
-							} else {
+							} else if (data == 1) {
 								showAlert("alert-danger", "Wrong credentials");
+							} else if (data == -1) {
+							  showAlert("alert-danger", "500 Internal server error");
 							}
 						},
 						error: function(data, textStatus) {
