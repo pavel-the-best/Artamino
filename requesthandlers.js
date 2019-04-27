@@ -170,12 +170,12 @@ function logn(request, response) {
       } else if (result == 0) {
         response.writeHead(200, {"Content-Type": "text/plain"});
         response.write("0");
-      } else if (result == -1) {
-        response.writeHead(500, {"Content-Type": "text/plain"})
-        response.write("-1")
       } else if (result == 1) {
         response.writeHead(200, {"Content-Type": "text/plain"})
         response.write("1")
+      } else {
+        response.writeHead(500, {"Content-Type": "text/plain"})
+        response.write("-1")
       }
     } else {
       response.write("1");
