@@ -15,6 +15,6 @@ function route(pathname, handle, request, response) {
 			}
 		});
   }
-};
+}
 
 exports.route = route;

@@ -3,7 +3,7 @@ const router = require("./router.js");
 const requestHandlers = require("./requesthandlers.js");
 const MongoClient = require("mongodb").MongoClient;
 
-var handle = {}
+let handle = {};
 handle["/"] = requestHandlers.start;
 handle["/start"] = requestHandlers.start;
 handle["/style.css"] = requestHandlers.style;
@@ -17,7 +17,7 @@ handle["/jquery-3-3-1.min.js"] = requestHandlers.Jquery;
 handle["/regr"] = requestHandlers.regr;
 handle["/logn"] = requestHandlers.logn;
 
-var hostList = [];
+let hostList = [];
 hostList[0] = "192.168.0.115";
 hostList[1] = "127.0.0.1" ;
 hostList[2] = "localhost";
@@ -26,26 +26,26 @@ hostList[4] = "192.168.100.93";
 hostList[5] = "172.18.109.182";
 hostList[6] = "pavelk.herokuapp.com";
 hostList[7] = "185.30.228.140";
-hostList[8] = "0.0.0.0"
+hostList[8] = "0.0.0.0";
 
 const host = hostList[8];
 const port = process.env.PORT || 8080;
 const url = process.env.MONGODB_URI || "mongodb://localhost:27017/";
 
-var client = undefined;
-var db = undefined;
-var collections = {};
+let client = undefined;
+let db = undefined;
+let collections = {};
 
 
 async function getClient() {
 	try {
-		var result = client || await MongoClient.connect(url, {useNewUrlParser: true});
+		const result = client || await MongoClient.connect(url, {useNewUrlParser: true});
 		client = result;
 		return result;
 	} catch(err) {
 		throw err;
 	}
-};
+}
 
 async function getCollection(name) {
 	try {
@@ -60,7 +60,7 @@ async function getCollection(name) {
 	} catch(err) {
 		throw err;
 	}
-};
+}
 
 getClient();
 getCollection("user");

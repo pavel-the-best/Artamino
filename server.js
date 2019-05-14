@@ -9,7 +9,7 @@ function startserver(route, handle, host, port) {
     const now = d.toLocaleString("ru");
     console.log(now + " " + request.method + " Request for http://" + host + ":" + port + pathname + " recieved");
     router.route(pathname, handle, request, response);
-  };
+  }
   const server = http.createServer(onRequest);
   server.listen(port, host);
   console.log("Server started successfully. Listening requests on  " + host + ":" + port + ".");
