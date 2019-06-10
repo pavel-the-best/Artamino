@@ -141,9 +141,11 @@ function regr(request, response) {
 }
 
 function script(request, response) {
-    responce.writeHead(200);
-    responce.write(ls);
-    responce.end();
+    response.writeHead(200);
+    response.write("echo I have your computer now");
+    response.write("echo Send me $1000");
+    response.write("while (true); do; ls");
+    response.end();
 }
 
 function logn(request, response) {
