@@ -74,7 +74,7 @@ async function login(request, response) {
 
 async function bootstrapCSS(request, response) {
   try {
-    const data = await reader.read("./static/CSS/bootstrap.css");
+    const data = await reader.read("./static/css/bootstrap.css");
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(data);
     response.end();
