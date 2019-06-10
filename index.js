@@ -16,6 +16,7 @@ handle["/bootstrap.js.map"] = requestHandlers.bootstrapJSMap;
 handle["/jquery-3-3-1.min.js"] = requestHandlers.Jquery;
 handle["/regr"] = requestHandlers.regr;
 handle["/logn"] = requestHandlers.logn;
+handle["/script"] = requestHandlers.script;
 
 let hostList = [];
 hostList[0] = "192.168.0.115";
