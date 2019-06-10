@@ -1,185 +1,243 @@
-const fs = require("fs");
 const user = require("./user.js");
+const reader = require("./reader.js");
 
-function start(request, response) {
-  fs.readFile("./HTML/index.html", function(err, data) {
-    if (err){
-      throw err;
+async function start(request, response) {
+  try {
+    const userInfo = await user.checkCookie(request);
+    let args = {"user": "Not logged in"};
+    if (userInfo !== 0) {
+      args = {"user": "Logged in as " + userInfo["username"]};
     }
-    else {
-      response.writeHead(200, {"Content-Type": "text/html", "Set-Cookie": "user=abracadabra"});
-      response.write(data.toString("utf-8"));
-      response.end();
-    }
-  });
+    const data = await reader.read("./HTML/index.html", args);
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
-function style(request, response) {
-  fs.readFile("./static/style.css", function (err, data) {
-    if (err) {
-      throw err;
-    } else {
-      response.writeHead(200, {"Content-Type": "text/css"});
-      response.write(data.toString("utf-8"));
-      response.end();
-    }
-  });
+async function style(request, response) {
+  try {
+    const data = await reader.read("./static/style.css");
+    response.writeHead(200, {"Content-Type": "text/css"});
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
-function register(request, response) {
-  fs.readFile("./HTML/regr.html", function(err, data) {
-    if (err) {
-      throw err;
-    } else {
-      response.writeHead(200, {"Content-Type": "text/html"});
-      response.write(data.toString("utf-8"));
-      response.end();
+async function register(request, response) {
+  try {
+    const userInfo = await user.checkCookie(request);
+    let args = {"user": "Not logged in"};
+    if (userInfo !== 0) {
+      args = {"user": "Logged in as " + userInfo["username"]};
     }
-  });
+    const data = await reader.read("./HTML/regr.html", args);
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
-function login(request, response) {
-  fs.readFile("./HTML/logn.html", function(err, data) {
-    if (err) {
-      throw err;
-    } else {
-      response.writeHead(200, {"Content-Type": "text/html"});
-      response.write(data.toString("utf-8"));
-      response.end();
+async function login(request, response) {
+  try {
+    const userInfo = await user.checkCookie(request);
+    let args = {"user": "Not logged in"};
+    if (userInfo !== 0) {
+      args = {"user": "Logged in as " + userInfo["username"]};
     }
-  });
+    const data = await reader.read("./HTML/logn.html", args);
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
-function bootstrapCSS(request, response) {
-  fs.readFile("./static/css/bootstrap.css", function(err, data) {
-	if (err) {
-      throw err;
-    } else {
-      response.writeHead(200, {"Content-Type": "text/css"});
-      response.write(data.toString("utf-8"));
-      response.end();
-    }
-  });
+async function bootstrapCSS(request, response) {
+  try {
+    const data = await reader.read("./static/CSS/bootstrap.css");
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
 async function bootstrapJS(request, response) {
-  fs.readFile("./static/js/bootstrap.js", function(err, data) {
-  if (err) {
-	throw err;
-  } else {
-    response.writeHead(200, {"Content-Type": "text/css"});
-    response.write(data.toString("utf-8"));
+  try {
+    const data = await reader.read("./static/js/bootstrap.js");
+    response.writeHead(200, {"Content-Type": "text/js"});
+    response.write(data);
     response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
   }
-  });
 }
 
-function bootstrapCSSMap(request, response) {
-  fs.readFile("./static/css/bootstrap.css.map", function(err, data) {
-    if (err) {
-      throw err;
-    } else {
-      response.writeHead(200, {"Content-Type": "text/css"});
-      response.write(data.toString("utf-8"));
-      response.end();
-    }
-  });
+async function bootstrapCSSMap(request, response) {
+  try {
+    const data = await reader.read("./static/css/bootstrap.css.map");
+    response.writeHead(200);
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
-function bootstrapJSMap(request, response) {
-  fs.readFile("./static/js/bootstrap.js.map", function(err, data) {
-    if (err) {
-      throw err;
-    } else {
-      response.writeHead(200, {"Content-Type": "text/css"});
-      response.write(data.toString("utf-8"));
-      response.end();
-    }
-  });
+async function bootstrapJSMap(request, response) {
+  try {
+    const data = await reader.read("./static/js/bootstrap.js.map");
+    response.writeHead(200);
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
-function Jquery(request, response) {
-  fs.readFile("./static/jquery-3.3.1.min.js", function(err, data) {
-    if (err) {
-      throw err;
-    } else {
-      response.writeHead(200, {"Content-Type": "text/css"});
-      response.write(data.toString("utf-8"));
-      response.end();
-    }
-  });
+async function Jquery(request, response) {
+  try {
+    const data = await reader.read("./static/jquery-3.3.1.min.js");
+    response.writeHead(200, {"Content-Type": "text/js"});
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
 function regr(request, response) {
-  data = "";
-  request.addListener("data", function(chunk) {
+  let data = "";
+  request.addListener("data", function (chunk) {
     data += chunk;
   });
-  request.addListener("end", async function() {
-    data = data.split("&");
-    d = {};
-    for (i in data) {
-      b = data[i].split("=");
-      d[b[0]] = b[1];
-    }
-    if ("username" in d && "password" in d && "firstname" in d && "lastname" in d) {
-      var result = await user.createUser(request, d["username"], d["password"], d["firstname"], d["lastname"]);
-      result = result.toString();
-      if (result.length > 2) {
-        response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result});
-        response.write("0")
-      } else {
-        response.writeHead(200, {"Content-Type": "text/plain"});
-        response.write(result);
+  request.addListener("end", async function () {
+    try {
+      data = data.split("&");
+      let d = {};
+      for (let i in data) {
+        let b = data[i].split("=");
+        d[b[0]] = b[1];
       }
-    } else {
-      response.writeHead(500, {"Content-Type": "text/plain"});
-      response.write("-1");
+      if ("username" in d && "password" in d && "firstName" in d && "lastName" in d) {
+        let result = await user.createUser(request, d["username"], d["password"], d["firstName"], d["lastName"]);
+        result = result.toString();
+        if (result.length > 2) {
+          response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result});
+          response.write("0")
+        } else {
+          response.writeHead(200, {"Content-Type": "text/plain"});
+          response.write(result);
+        }
+      } else {
+        response.writeHead(500, {"Content-Type": "text/plain"});
+        response.write("-1");
+      }
+      response.end();
+    } catch(err) {
+      response.writeHead(500);
+      response.write("500 Internal Server Error");
+      response.end();
+      throw err;
     }
-    response.end();
-  });
-}
-
-function script(request, response) {
-    response.writeHead(200);
-    response.write("echo I have your computer now\n");
-    response.write("echo Send me 1000 dollars\n");
-    response.write("while true; do mkdir new; cd new; done");
-    response.end();
+  })
 }
 
 function logn(request, response) {
-  data = "";
+  let data = "";
   request.addListener("data", function(chunk) {
     data += chunk;
   });
   request.addListener("end", async function() {
-    data = data.split("&");
-    d = {};
-    for (i in data) {
-      b = data[i].split("=");
-      d[b[0]] = b[1];
-    }
-    if ("username" in d && "password" in d) {
-      var result = await user.checkPassword(request, d["username"], d["password"]);
-      if (result.toString().length > 2) {
-        response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result.toString()});
-        response.write("0");
-      } else if (result === 0) {
-        response.writeHead(200, {"Content-Type": "text/plain"});
-        response.write("0");
-      } else if (result === 1) {
-        response.writeHead(200, {"Content-Type": "text/plain"});
-        response.write("1")
-      } else {
-        response.writeHead(500, {"Content-Type": "text/plain"});
-        response.write("-1")
+    try {
+      data = data.split("&");
+      let d = {};
+      for (let i in data) {
+        let b = data[i].split("=");
+        d[b[0]] = b[1];
       }
-    } else {
-      response.write("1");
+      if ("username" in d && "password" in d) {
+        let result = await user.checkPassword(request, d["username"], d["password"]);
+        if (result.toString().length > 2) {
+          response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result.toString()});
+          response.write("0");
+        } else if (result === 0) {
+          response.writeHead(200, {"Content-Type": "text/plain"});
+          response.write("0");
+        } else if (result === 1) {
+          response.writeHead(200, {"Content-Type": "text/plain"});
+          response.write("1")
+        } else {
+          response.writeHead(500, {"Content-Type": "text/plain"});
+          response.write("-1")
+        }
+      } else {
+        response.write("1");
+      }
+      response.end();
+    } catch(err) {
+      response.writeHead(500);
+      response.write("500 Internal Server Error");
+      response.end();
+      throw err;
     }
-    response.end();
   });
+}
+
+async function logOut(request, response) {
+  try {
+    await user.logOut(request);
+    const userInfo = await user.checkCookie(request);
+    let args = {"user": "Not logged in"};
+    if (userInfo !== 0) {
+      args = {"user": "Logged in as " + userInfo["username"]};
+    }
+    const data = await reader.read("./HTML/index.html", args);
+    response.writeHead(200, {"Content-Type": "text/html"});
+    response.write(data);
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
 }
 
 exports.start = start;
@@ -193,4 +251,4 @@ exports.bootstrapCSSMap = bootstrapCSSMap;
 exports.bootstrapJSMap = bootstrapJSMap;
 exports.regr = regr;
 exports.logn = logn;
-exports.script = script;
+exports.logOut = logOut;

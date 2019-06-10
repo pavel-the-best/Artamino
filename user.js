@@ -4,14 +4,17 @@ const ObjectId = require("mongodb").ObjectId;
 
 function parseCookies (request) {
     let cookies = request.headers.cookie;
-    cookies = cookies.split(';');
-    let d = {};
-    let cur = [];
-    for (let i in cookies) {
-      cur = cookies[i].split('=');
-      d[cur[0].trim()] = cur[1].trim();
-    }
-    return d;
+    if (cookies === undefined) {
+    	return undefined;
+	}
+	cookies = cookies.split(';');
+	let d = {};
+	let cur = [];
+	for (let i in cookies) {
+		cur = cookies[i].split('=');
+		d[cur[0].trim()] = cur[1].trim();
+	}
+	return d;
 }
 
 const saltRounds = 11;
@@ -54,6 +57,8 @@ async function checkCookie(request) {
 	try {
 		const auth = await index.getCollection("auth");
 		const c = parseCookies(request);
+		if (c === undefined)
+			return 0;
 		if ("auth" in c) {
 			const query = {
 				_id: ObjectId(c["auth"]),
@@ -78,14 +83,30 @@ async function checkCookie(request) {
 			return 0;
 		}
 	} catch (err) {
-	    return -1;
+		throw err;
+	}
+}
+
+async function logOut(request) {
+	try {
+		const result = await checkCookie(request);
+		if (result === 0)
+			return;
+		const auth = await index.getCollection("auth");
+		const c = parseCookies(request);
+		const query = {
+			_id: ObjectId(c["auth"])
+		};
+		await auth.deleteOne(query);
+	} catch(err) {
+		throw err;
 	}
 }
 
 async function checkPassword(request, name, passwordtocheck) {
 	try {
 	    const res1 = await checkCookie(request);
-	    if (typeof res1 === "number") {
+	    if (res1 === 0) {
 		    const user = await index.getCollection("user");
 		    const query = {
 			    username: name
@@ -105,16 +126,17 @@ async function checkPassword(request, name, passwordtocheck) {
 		        const res = await auth.insertOne(query);
 		    	return res.insertedId;
 		    } else {
-		    	return 1;
+		    	return 0;
 		    }
 		} else {
-		    return 0;
+		    return 1;
 		}
 	} catch(err) {
-		return -1;
+		throw err;
 	}
 }
 
 exports.createUser = createUser;
 exports.checkPassword = checkPassword;
 exports.checkCookie = checkCookie;
+exports.logOut = logOut;

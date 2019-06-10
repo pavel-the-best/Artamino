@@ -1,4 +1,4 @@
-<html>
+<html lang="en">
 	<head>
 		<meta charset="utf-8">
 		<title>Registration</title>
@@ -17,11 +17,15 @@
 	    		    <span class="navbar-toggler-icon"></span>
 	    		</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
-			    <div class="navbar-nav">
-		        <a class="nav-item nav-link" href="/">Home</a>
-		        <a class="nav-item nav-link active" href="#">Register <span class="sr-only">(current)</span></a>
-			        <a class="nav-item nav-link" href="/login">Login</a>
-			    </div>
+					<div class="navbar-nav d-flex w-100">
+						<a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+						<a class="nav-item nav-link" href="/register">Register</a>
+						<a class="nav-item nav-link" href="/login">Login</a>
+						<div class="d-flex ml-auto">
+							<span class="ml-auto navbar-text">{{user}}</span>
+							<a class="ml-auto nav-item nav-link active" href="/logout">Log out</a>
+						</div>
+					</div>
 			  </div>
 			</nav>
 			<div class="d-flex h-100 w-100 justify-content-center align-items-center">
@@ -42,10 +46,10 @@
 							<input type="password" class="form-control" name="password" placeholder="Pick a password" id="password">
 						</div>
 						<div class="input-group mb-2">
-							<input type="text" class="form-control" name="firstname" placeholder="Enter your first name" id="firstname">
+							<input type="text" class="form-control" name="firstName" placeholder="Enter your first name" id="firstName">
 						</div>
 						<div class="input-group mb-2">
-							<input type="text" class="form-control" name="lastname" placeholder="Enter your last name" id="lastname">
+							<input type="text" class="form-control" name="lastName" placeholder="Enter your last name" id="lastName">
 						</div>
 						<div id="alert_placeholder">
 						</div>
@@ -55,14 +59,14 @@
 		</div>
 		<script>
 			$("#submit").click(function() {
-				if (!($("#username")[0].value.length && $("#password")[0].value.length && $("#firstname")[0].value.length && $("#lastname")[0].value.length)) {
+				const name = $("#username")[0].value;
+				const psswd = $("#password")[0].value;
+				const fname = $("#firstName")[0].value;
+				const lname = $("#lastName")[0].value;
+				if (name.length && password.length && fname.length && lname.length) {
 					showAlert("alert-warning", "All fields are required");
 				} else {
 					$(".alert").alert("close");
-					const name = $("#username")[0].value;
-					const psswd = $("#password")[0].value;
-					const fname = $("#firstname")[0].value;
-					const lname = $("#lastname")[0].value;
 					$.ajax({
 						url: "/regr",
 						method: "POST",
@@ -70,20 +74,20 @@
 						data: {
 							username: name,
 							password: psswd,
-							firstname: fname,
-							lastname: lname
+							firstName: fname,
+							lastName: lname
 						},
-						success: function(data, textStatus) {
-							if (data == 0) {
+						success: function(data) {
+							if (data === 0) {
 								showAlert("alert-success", "Registration successfull");
-							} else if (data == 1) {
+							} else if (data === 1) {
 								showAlert("alert-warning", "Such username already exists");
-							} else if (data == -1) {
+							} else if (data === -1) {
 							    showAlert("alert-danger", "Internal server error");
 							}
 						},
-						error: function(data, textStatus) {
-							showAlert("alert-danger", "Failed connection, check console")
+						error: function(data) {
+							showAlert("alert-danger", "Failed connection, check console (this may be helpful: " + data.toString() + ")")
 						}
 					})
 				}
@@ -92,7 +96,7 @@
 				$("#alert_placeholder")[0].innerHTML = "\n\
 					<div class=\"alert " + alertClass + "\" role=\"alert\">\n\
 					<strong>" + alertMessage + "</strong>\n</div>"
-				};
+				}
 		</script>
 	</body>
 </html>

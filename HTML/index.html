@@ -16,12 +16,15 @@
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
-			    <div class="navbar-nav">
-		        <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-		        <a class="nav-item nav-link" href="/register">Register</a>
-			      <a class="nav-item nav-link" href="/login">Login</a>
-			      <p>{{user}}</p>
-			    </div>
+			    <div class="navbar-nav d-flex w-100">
+		        	<a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
+		        	<a class="nav-item nav-link" href="/register">Register</a>
+					<a class="nav-item nav-link" href="/login">Login</a>
+					<div class="d-flex ml-auto">
+						<span class="ml-auto navbar-text">{{user}}</span>
+						<a class="ml-auto nav-item nav-link active" href="/logout">Log out</a>
+					</div>
+				</div>
 			  </div>
 			</nav>
 			<div class="d-flex text h-100 w-100 justify-content-center align-items-center">
