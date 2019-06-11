@@ -18,8 +18,8 @@
 	    		</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
 					<div class="navbar-nav d-flex w-100">
-						<a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-						<a class="nav-item nav-link" href="/register">Register</a>
+						<a class="nav-item nav-link" href="#">Home</a>
+						<a class="nav-item nav-link active" href="/register">Register <span class="sr-only">(current)</span></a>
 						<a class="nav-item nav-link" href="/login">Login</a>
 						<div class="d-flex ml-auto">
 							<span class="ml-auto navbar-text">{{user}}</span>
@@ -37,19 +37,19 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text">@</span>
 							</div>
-							<input type="text" class="form-control" name="username" placeholder="Pick a nickname" id="username">
+							<label for="username"></label><input type="text" class="form-control" name="username" placeholder="Pick a nickname" id="username">
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-prepend">
 								<span class="input-group-text"><i class="fas fa-key"></i></span>
 							</div>
-							<input type="password" class="form-control" name="password" placeholder="Pick a password" id="password">
+							<label for="password"></label><input type="password" class="form-control" name="password" placeholder="Pick a password" id="password">
 						</div>
 						<div class="input-group mb-2">
-							<input type="text" class="form-control" name="firstName" placeholder="Enter your first name" id="firstName">
+							<label for="firstName"></label><input type="text" class="form-control" name="firstName" placeholder="Enter your first name" id="firstName">
 						</div>
 						<div class="input-group mb-2">
-							<input type="text" class="form-control" name="lastName" placeholder="Enter your last name" id="lastName">
+							<label for="lastName"></label><input type="text" class="form-control" name="lastName" placeholder="Enter your last name" id="lastName">
 						</div>
 						<div id="alert_placeholder">
 						</div>
@@ -86,8 +86,8 @@
 							    showAlert("alert-danger", "Internal server error");
 							}
 						},
-						error: function(data) {
-							showAlert("alert-danger", "Failed connection, check console (this may be helpful: " + data.toString() + ")")
+						error: function() {
+							showAlert("alert-danger", "Failed connection, check console")
 						}
 					})
 				}
