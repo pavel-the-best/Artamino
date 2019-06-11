@@ -67,11 +67,16 @@ async function getCollection(dbName, name) {
 	try {
 		await getClient();
 		db = await getDB(dbName);
-		if (dbName in collections && name in collections[dbName]) {
-			return collections[dbName][name];
+		if (dbName in collections) {
+			if (name in collections[dbName]) {
+				return collections[dbName][name];
+			} else {
+				collections[dbName][name] = await db.collection(name);
+				return collections[dbName][name];
+			}
 		} else {
+			collections[dbName] = {};
 			collections[dbName][name] = await db.collection(name);
-			return collections[dbName][name];
 		}
 	} catch(err) {
 		throw err;

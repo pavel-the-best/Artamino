@@ -18,9 +18,9 @@
 	  		</button>
 				<div class="collapse navbar-collapse" id="navbarNav">
 					<div class="navbar-nav d-flex w-100">
-						<a class="nav-item nav-link" href="#">Home</a>
+						<a class="nav-item nav-link" href="/">Home</a>
 						<a class="nav-item nav-link" href="/register">Register</a>
-						<a class="nav-item nav-link active" href="/login">Login <span class="sr-only">(current)</span></a>
+						<a class="nav-item nav-link active" href="#">Login <span class="sr-only">(current)</span></a>
 						<div class="d-flex ml-auto">
 							<span class="ml-auto navbar-text">{{user}}</span>
 							<a class="ml-auto nav-item nav-link active" href="/logout">Log out</a>
@@ -55,7 +55,7 @@
 			$("#submit").click(function() {
 				const name = $("#username")[0].value;
 				const psswd = $("#password")[0].value;
-				if (name.length && psswd.length) {
+				if (!(name.length && psswd.length)) {
 					showAlert("alert-warning", "All fields are required");
 				} else {
 					$(".alert").alert("close");
