@@ -17,6 +17,7 @@ handle["/jquery-3-3-1.min.js"] = requestHandlers.Jquery;
 handle["/regr"] = requestHandlers.regr;
 handle["/logn"] = requestHandlers.logn;
 handle["/logout"] = requestHandlers.logOut;
+handle["/createMessage"] = requestHandlers.createMessage;
 
 let hostList = [];
 hostList[0] = "192.168.0.115";

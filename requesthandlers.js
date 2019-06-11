@@ -1,5 +1,6 @@
 const user = require("./user.js");
 const reader = require("./reader.js");
+const chat = require("./chat.js");
 
 async function start(request, response) {
   try {
@@ -240,6 +241,20 @@ async function logOut(request, response) {
   }
 }
 
+async function createMessage(request, response) {
+  try {
+    await chat.createMessage(request, "hello");
+    response.writeHead(200);
+    response.write("Done!");
+    response.end();
+  } catch(err) {
+    response.writeHead(500);
+    response.write("500 Internal Server Error");
+    response.end();
+    throw err;
+  }
+}
+
 exports.start = start;
 exports.style = style;
 exports.register = register;
@@ -252,3 +267,4 @@ exports.bootstrapJSMap = bootstrapJSMap;
 exports.regr = regr;
 exports.logn = logn;
 exports.logOut = logOut;
+exports.createMessage = createMessage;
