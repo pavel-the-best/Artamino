@@ -34,6 +34,7 @@ const port = process.env.PORT || 8080;
 const url = process.env.MONGODB_URI || "mongodb://localhost:27017/";
 
 let client = undefined;
+let dbs = {};
 let db = undefined;
 let collections = {};
 
@@ -48,15 +49,29 @@ async function getClient() {
 	}
 }
 
-async function getCollection(name) {
+async function getDB(name) {
 	try {
 		await getClient();
-		db = db || client.db("auth");
-		if (name in collections) {
-			return collections[name];
+		if (name in dbs) {
+			return dbs[name];
 		} else {
-			collections[name] = await db.collection(name);
-			return collections[name];
+			dbs[name] = await client.db(name);
+			return dbs[name]
+		}
+	} catch(err) {
+		throw err;
+	}
+}
+
+async function getCollection(dbName, name) {
+	try {
+		await getClient();
+		db = await getDB(dbName);
+		if (dbName in collections && name in collections[dbName]) {
+			return collections[dbName][name];
+		} else {
+			collections[dbName][name] = await db.collection(name);
+			return collections[dbName][name];
 		}
 	} catch(err) {
 		throw err;
@@ -64,10 +79,12 @@ async function getCollection(name) {
 }
 
 getClient();
-getCollection("user");
-getCollection("session");
+getDB("auth");
+getCollection("auth", "user");
+getCollection("auth", "session");
 server.startserver(router.route, handle, host, port);
 
-exports.getClient = getClient;
 exports.hostList = hostList;
+exports.getClient = getClient;
+exports.getDB = getDB;
 exports.getCollection = getCollection;

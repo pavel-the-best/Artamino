@@ -21,7 +21,7 @@ const saltRounds = 11;
 
 async function createUser(request, name, textpassword, firstname, lastname) {
 	try {
-		const user = await index.getCollection("user");
+		const user = await index.getCollection("auth", "user");
 		const query = {
 			username: name
 		};
@@ -36,7 +36,7 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			};
 			await user.insertOne(theUser);
 			console.log("user " + name + " successfully created");
-			let auth = index.getCollection("auth");
+			let auth = index.getCollection("auth","auth");
 			const u_a = request.headers['user-agent'];
 			const authQuery = {
 				user_agent: u_a,
@@ -55,7 +55,7 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 
 async function checkCookie(request) {
 	try {
-		const auth = await index.getCollection("auth");
+		const auth = await index.getCollection("auth", "auth");
 		const c = parseCookies(request);
 		if (c === undefined)
 			return 0;
@@ -66,7 +66,7 @@ async function checkCookie(request) {
 			};
 			const searchresult = await auth.find(query).toArray();
 			if (searchresult.length !== 0) {
-				const user = await index.getCollection("user");
+				const user = await index.getCollection("auth", "user");
 				const userQuery = {
 					_id: ObjectId(searchresult[0]["user_id"])
 				};
@@ -92,7 +92,7 @@ async function logOut(request) {
 		const result = await checkCookie(request);
 		if (result === 0)
 			return;
-		const auth = await index.getCollection("auth");
+		const auth = await index.getCollection("auth", "auth");
 		const c = parseCookies(request);
 		const query = {
 			_id: ObjectId(c["auth"])
@@ -107,7 +107,7 @@ async function checkPassword(request, name, passwordtocheck) {
 	try {
 	    const res1 = await checkCookie(request);
 	    if (res1 === 0) {
-		    const user = await index.getCollection("user");
+		    const user = await index.getCollection("auth","user");
 		    const query = {
 			    username: name
 		    };
@@ -122,7 +122,7 @@ async function checkPassword(request, name, passwordtocheck) {
 		            user_id: searchResult[0]["_id"],
 		            user_agent: u_a
 		        };
-		        const auth = await index.getCollection("auth");
+		        const auth = await index.getCollection("auth", "auth");
 		        const res = await auth.insertOne(query);
 		    	return res.insertedId;
 		    } else {
