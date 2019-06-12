@@ -46,7 +46,7 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 			const res = await auth.insertOne(authQuery);
 			return res.insertedId;
 		} else {
-			return 1;
+			return 0;
 		}
 	} catch(err) {
 		return -1;

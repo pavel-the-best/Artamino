@@ -162,7 +162,7 @@ function regr(request, response) {
         result = result.toString();
         if (result.length > 2) {
           response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result});
-          response.write("0")
+          response.write("1")
         } else {
           response.writeHead(200, {"Content-Type": "text/plain"});
           response.write(result);
