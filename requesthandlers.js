@@ -1,4 +1,5 @@
 const user = require("./user.js");
+const url = require("url");
 const reader = require("./reader.js");
 const chat = require("./chat.js");
 
@@ -76,7 +77,7 @@ async function login(request, response) {
 async function bootstrapCSS(request, response) {
   try {
     const data = await reader.read("./static/css/bootstrap.css");
-    response.writeHead(200, {"Content-Type": "text/html"});
+    response.writeHead(200, {"Content-Type": "text/css"});
     response.write(data);
     response.end();
   } catch(err) {
@@ -243,10 +244,23 @@ async function logOut(request, response) {
 
 async function createMessage(request, response) {
   try {
-    await chat.createMessage(request, "hello");
-    response.writeHead(200);
-    response.write("Done!");
-    response.end();
+    let query = url.parse(request.url).query;
+    let dict = {};
+    query = query.split('&');
+    for (let i in query) {
+      let x = query[i].split('=');
+      dict[x[0]] = x[1];
+    }
+    if ("text" in dict) {
+      await chat.createMessage(request, dict["text"]);
+      response.writeHead(200);
+      response.write("Done!");
+      response.end();
+    } else {
+      response.writeHead(400);
+      response.write("400 Bad Request");
+      response.end();
+    }
   } catch(err) {
     response.writeHead(500);
     response.write("500 Internal Server Error");

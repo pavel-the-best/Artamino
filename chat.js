@@ -1,4 +1,5 @@
 const user = require("./user.js");
+const ObjectID = require("mongodb").ObjectId;
 const index = require("./index.js");
 
 async function createMessage(request, text) {
@@ -12,7 +13,7 @@ async function createMessage(request, text) {
         const milliseconds = date.getTime();
         const query = {
             text: text,
-            user: user,
+            user_id: ObjectID(userInfo._id),
             created: milliseconds
         };
         await message.insertOne(query);

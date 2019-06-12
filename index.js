@@ -52,7 +52,7 @@ async function getClient() {
 
 async function getDB(name) {
 	try {
-		await getClient();
+		client = await getClient();
 		if (name in dbs) {
 			return dbs[name];
 		} else {
@@ -86,8 +86,11 @@ async function getCollection(dbName, name) {
 
 getClient();
 getDB("auth");
+getDB("message");
 getCollection("auth", "user");
-getCollection("auth", "session");
+getCollection("auth", "auth");
+getCollection("message", "message");
+
 server.startserver(router.route, handle, host, port);
 
 exports.hostList = hostList;
