@@ -80,6 +80,7 @@
 						success: function(data) {
 							if (data === 1) {
 								showAlert("alert-success", "Registration successfull");
+								setTimeout(reload, 1000);
 							} else if (data === 0) {
 								showAlert("alert-warning", "Such username already exists");
 							} else if (data === -1) {
@@ -92,11 +93,14 @@
 					})
 				}
 			});
+
 			function showAlert(alertClass, alertMessage) {
-				$("#alert_placeholder")[0].innerHTML = "\n\
-					<div class=\"alert " + alertClass + "\" role=\"alert\">\n\
-					<strong>" + alertMessage + "</strong>\n</div>"
-				}
+				$("#alert_placeholder")[0].innerHTML = "\n\<div class=\"alert " + alertClass + "\" role=\"alert\">\n\<strong>" + alertMessage + "</strong>\n</div>"
+			}
+
+			function reload() {
+				document.location.href = "/";
+			}
 		</script>
 	</body>
 </html>
