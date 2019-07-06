@@ -15,7 +15,7 @@ async function start(request, response) {
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     await error.writeHTMLError(500, response);
     throw err;
   }
@@ -27,7 +27,7 @@ async function style(request, response) {
     response.writeHead(200, {"Content-Type": "text/css"});
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }
@@ -44,7 +44,7 @@ async function register(request, response) {
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     await error.writeHTMLError(500, response);
     throw err;
   }
@@ -61,7 +61,7 @@ async function login(request, response) {
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }
@@ -73,7 +73,7 @@ async function bootstrapCSS(request, response) {
     response.writeHead(200, {"Content-Type": "text/css"});
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }
@@ -85,7 +85,7 @@ async function bootstrapJS(request, response) {
     response.writeHead(200, {"Content-Type": "text/js"});
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }
@@ -97,7 +97,7 @@ async function bootstrapCSSMap(request, response) {
     response.writeHead(200);
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }
@@ -109,7 +109,7 @@ async function bootstrapJSMap(request, response) {
     response.writeHead(200);
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }
@@ -121,7 +121,7 @@ async function Jquery(request, response) {
     response.writeHead(200, {"Content-Type": "text/js"});
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }
@@ -155,7 +155,7 @@ function regr(request, response) {
         response.write("-1");
       }
       response.end();
-    } catch(err) {
+    } catch (err) {
       error.writeError(500, response);
       throw err;
     }
@@ -164,10 +164,10 @@ function regr(request, response) {
 
 function logn(request, response) {
   let data = "";
-  request.addListener("data", function(chunk) {
+  request.addListener("data", function (chunk) {
     data += chunk;
   });
-  request.addListener("end", async function() {
+  request.addListener("end", async function () {
     try {
       data = data.split("&");
       let d = {};
@@ -194,7 +194,7 @@ function logn(request, response) {
         response.write("1");
       }
       response.end();
-    } catch(err) {
+    } catch (err) {
       error.writeError(500, response);
       throw err;
     }
@@ -213,7 +213,7 @@ async function logOut(request, response) {
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(data);
     response.end();
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }
@@ -238,7 +238,7 @@ async function createMessage(request, response) {
       response.write("400 Bad Request");
       response.end();
     }
-  } catch(err) {
+  } catch (err) {
     error.writeError(500, response);
     throw err;
   }

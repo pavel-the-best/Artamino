@@ -30,47 +30,47 @@ let collections = {};
 
 
 async function getClient() {
-	try {
-		const result = client || await MongoClient.connect(url, {useNewUrlParser: true});
-		client = result;
-		return result;
-	} catch(err) {
-		throw err;
-	}
+  try {
+    const result = client || await MongoClient.connect(url, {useNewUrlParser: true});
+    client = result;
+    return result;
+  } catch (err) {
+    throw err;
+  }
 }
 
 async function getDB(name) {
-	try {
-		client = await getClient();
-		if (name in dbs) {
-			return dbs[name];
-		} else {
-			dbs[name] = await client.db(name);
-			return dbs[name]
-		}
-	} catch(err) {
-		throw err;
-	}
+  try {
+    client = await getClient();
+    if (name in dbs) {
+      return dbs[name];
+    } else {
+      dbs[name] = await client.db(name);
+      return dbs[name]
+    }
+  } catch (err) {
+    throw err;
+  }
 }
 
 async function getCollection(dbName, name) {
-	try {
-		await getClient();
-		db = await getDB(dbName);
-		if (dbName in collections) {
-			if (name in collections[dbName]) {
-				return collections[dbName][name];
-			} else {
-				collections[dbName][name] = await db.collection(name);
-				return collections[dbName][name];
-			}
-		} else {
-			collections[dbName] = {};
-			collections[dbName][name] = await db.collection(name);
-		}
-	} catch(err) {
-		throw err;
-	}
+  try {
+    await getClient();
+    db = await getDB(dbName);
+    if (dbName in collections) {
+      if (name in collections[dbName]) {
+        return collections[dbName][name];
+      } else {
+        collections[dbName][name] = await db.collection(name);
+        return collections[dbName][name];
+      }
+    } else {
+      collections[dbName] = {};
+      collections[dbName][name] = await db.collection(name);
+    }
+  } catch (err) {
+    throw err;
+  }
 }
 
 getClient();

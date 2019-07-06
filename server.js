@@ -10,6 +10,7 @@ function startServer(route, handle, host, port) {
     console.log(now + " " + request.method + " Request for http://" + host + ":" + port + pathname + " recieved");
     await router.route(pathname, handle, request, response);
   }
+
   const server = http.createServer(onRequest);
   server.listen(port, host);
   console.log("Server started successfully. Listening requests on  " + host + ":" + port + ".");
