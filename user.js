@@ -19,7 +19,7 @@ function parseCookies(request) {
 
 const saltRounds = 11;
 
-async function createUser(request, name, textpassword, firstname, lastname) {
+async function createUser(request, name, textPassword, firstName, lastName) {
   try {
     const user = await index.getCollection("auth", "user");
     const query = {
@@ -27,12 +27,12 @@ async function createUser(request, name, textpassword, firstname, lastname) {
     };
     const tryUser = await user.find(query).toArray();
     if (tryUser.length === 0) {
-      const hashP = await bcrypt.hash(textpassword, saltRounds);
+      const hashP = await bcrypt.hash(textPassword, saltRounds);
       const theUser = {
         username: name,
         password: hashP,
-        first_name: firstname,
-        last_name: lastname
+        first_name: firstName,
+        last_name: lastName
       };
       await user.insertOne(theUser);
       console.log("user " + name + " successfully created");
@@ -56,16 +56,16 @@ async function createUser(request, name, textpassword, firstname, lastname) {
 async function checkCookie(request) {
   try {
     const c = parseCookies(request);
-    if (c && "auth" in c) {
+    if (c && "auth" in c && c["auth"].length === 12) {
       const query = {
         _id: ObjectId(c["auth"]),
         user_agent: request.headers['user-agent']
       };
       const auth = await index.getCollection("auth", "auth");
-      const searchresult = await auth.find(query).toArray();
-      if (searchresult.length !== 0) {
+      const searchResult = await auth.find(query).toArray();
+      if (searchResult.length !== 0) {
         const userQuery = {
-          _id: ObjectId(searchresult[0]["user_id"])
+          _id: ObjectId(searchResult[0]["user_id"])
         };
         const user = await index.getCollection("auth", "user");
         const resultUser = await user.find(userQuery).toArray();
@@ -101,7 +101,7 @@ async function logOut(request) {
   }
 }
 
-async function checkPassword(request, name, passwordtocheck) {
+async function checkPassword(request, name, passwordToCheck) {
   try {
     const res1 = await checkCookie(request);
     if (res1 === 0) {
@@ -112,7 +112,7 @@ async function checkPassword(request, name, passwordtocheck) {
       const searchResult = await user.find(query).toArray();
       let result = false;
       if (searchResult.length !== 0) {
-        result = await bcrypt.compare(passwordtocheck, searchResult[0]["password"]);
+        result = await bcrypt.compare(passwordToCheck, searchResult[0]["password"]);
       }
       if (result) {
         const u_a = request.headers['user-agent'];
