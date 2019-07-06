@@ -10,8 +10,21 @@
 	</head>
 	<body>
 		<div class="container-fluid">
+			<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+				<span class="navbar-brand">TheProject</span>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<div class="navbar-nav d-flex w-100">
+						<a class="nav-item nav-link active" href="/home">Home <span class="sr-only">(current)</span></a>
+						<a class="nav-item nav-link" href="/register">Register</a>
+						<a class="nav-item nav-link" href="/login">Login</a>
+					</div>
+				</div>
+			</nav>
 			<div class="d-flex text h-100 w-100 justify-content-center align-items-center">
-				Error 404: Not Found
+				Error {{code}}: {{name}}
 			</div>
 		</div>
 	</body>

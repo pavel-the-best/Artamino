@@ -1,19 +1,11 @@
-const fs = require("fs");
+const error = require("./error.js");
 
-function route(pathname, handle, request, response) {
+async function route(pathname, handle, request, response) {
 	if (typeof handle[pathname] === "function") {
 		handle[pathname](request, response);
   } else {
     console.log("No request handler found for " + pathname);
-		response.writeHead(404, {"Content-type": "text/html"});
-		fs.readFile("HTML/error.html", function(err, data) {
-			if (err) {
-				throw err;
-			} else {
-				response.write(data.toString());
-				response.end();
-			}
-		});
+    await error.writeHTMLError(404, response);
   }
 }
 

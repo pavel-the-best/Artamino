@@ -90,14 +90,14 @@ async function checkCookie(request) {
 async function logOut(request) {
 	try {
 		const result = await checkCookie(request);
-		if (result === 0)
-			return;
-		const auth = await index.getCollection("auth", "auth");
-		const c = parseCookies(request);
-		const query = {
-			_id: ObjectId(c["auth"])
-		};
-		await auth.deleteOne(query);
+		if (result !== 0) {
+			const auth = await index.getCollection("auth", "auth");
+			const c = parseCookies(request);
+			const query = {
+				_id: ObjectId(c["auth"])
+			};
+			await auth.deleteOne(query);
+		}
 	} catch(err) {
 		throw err;
 	}

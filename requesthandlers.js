@@ -2,6 +2,7 @@ const user = require("./user.js");
 const url = require("url");
 const reader = require("./reader.js");
 const chat = require("./chat.js");
+const error = require("./error.js");
 
 async function start(request, response) {
   try {
@@ -15,9 +16,7 @@ async function start(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    await error.writeHTMLError(500, response);
     throw err;
   }
 }
@@ -29,9 +28,7 @@ async function style(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }
@@ -48,9 +45,7 @@ async function register(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    await error.writeHTMLError(500, response);
     throw err;
   }
 }
@@ -67,9 +62,7 @@ async function login(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }
@@ -81,9 +74,7 @@ async function bootstrapCSS(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }
@@ -95,9 +86,7 @@ async function bootstrapJS(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }
@@ -109,9 +98,7 @@ async function bootstrapCSSMap(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }
@@ -123,9 +110,7 @@ async function bootstrapJSMap(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }
@@ -137,9 +122,7 @@ async function Jquery(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }
@@ -173,9 +156,7 @@ function regr(request, response) {
       }
       response.end();
     } catch(err) {
-      response.writeHead(500);
-      response.write("500 Internal Server Error");
-      response.end();
+      error.writeError(500, response);
       throw err;
     }
   })
@@ -198,14 +179,14 @@ function logn(request, response) {
         let result = await user.checkPassword(request, d["username"], d["password"]);
         if (result.toString().length > 2) {
           response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result.toString()});
-          response.write("0");
+          response.write("1");
         } else if (result === 0) {
           response.writeHead(200, {"Content-Type": "text/plain"});
           response.write("0");
         } else if (result === 1) {
           response.writeHead(200, {"Content-Type": "text/plain"});
           response.write("1")
-        } else {
+        } else if (result === -1) {
           response.writeHead(500, {"Content-Type": "text/plain"});
           response.write("-1")
         }
@@ -214,9 +195,7 @@ function logn(request, response) {
       }
       response.end();
     } catch(err) {
-      response.writeHead(500);
-      response.write("500 Internal Server Error");
-      response.end();
+      error.writeError(500, response);
       throw err;
     }
   });
@@ -235,9 +214,7 @@ async function logOut(request, response) {
     response.write(data);
     response.end();
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }
@@ -262,9 +239,7 @@ async function createMessage(request, response) {
       response.end();
     }
   } catch(err) {
-    response.writeHead(500);
-    response.write("500 Internal Server Error");
-    response.end();
+    error.writeError(500, response);
     throw err;
   }
 }

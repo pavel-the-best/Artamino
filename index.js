@@ -19,18 +19,7 @@ handle["/logn"] = requestHandlers.logn;
 handle["/logout"] = requestHandlers.logOut;
 handle["/createMessage"] = requestHandlers.createMessage;
 
-let hostList = [];
-hostList[0] = "192.168.0.115";
-hostList[1] = "127.0.0.1" ;
-hostList[2] = "localhost";
-hostList[3] = "10.6.107.184";
-hostList[4] = "192.168.100.93";
-hostList[5] = "172.18.109.182";
-hostList[6] = "pavelk.herokuapp.com";
-hostList[7] = "185.30.228.140";
-hostList[8] = "0.0.0.0";
-
-const host = hostList[8];
+const host = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || 8080;
 const url = process.env.MONGODB_URI || "mongodb://localhost:27017/";
 
@@ -91,9 +80,8 @@ getCollection("auth", "user");
 getCollection("auth", "auth");
 getCollection("message", "message");
 
-server.startserver(router.route, handle, host, port);
+server.startServer(router.route, handle, host, port);
 
-exports.hostList = hostList;
 exports.getClient = getClient;
 exports.getDB = getDB;
 exports.getCollection = getCollection;
