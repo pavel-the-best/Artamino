@@ -6,37 +6,28 @@ const readFile = util.promisify(fs.readFile);
 String.prototype.insert = function (index, string) {
   if (index > 0)
     return this.substring(0, index) + string + this.substring(index, this.length);
-
   return string + this;
 };
+
+function replaceSymbol(string, symbol, replacement) {
+  for (let i = 0; i < string.length; ++i) {
+    if (string[i] === symbol) {
+      string[i] = replacement[0];
+      string = string.insert(i + 1, replacement.substring(1, replacement.length));
+      i += replacement.length - 1;
+    }
+  }
+  return string;
+}
 
 async function read(fileName, args = {}) {
   let data = await readFile(fileName);
   data = data.toString();
   for (let arg in args) {
-    for (let i = 0; i < args[arg].length; ++i) {
-      if (args[arg][i] === '&') {
-        args[arg] = args[arg].insert(i + 1, "amp;");
-      }
-    }
-    for (let i = 0; i < args[arg].length; ++i) {
-      if (args[arg][i] === '<') {
-        args[arg][i] = '&';
-        args[arg] = args[arg].insert(i + 1, "lt;");
-      }
-    }
-    for (let i = 0; i < args[arg].length; ++i) {
-      if (args[arg][i] === '<') {
-        args[arg][i] = '&';
-        args[arg] = args[arg].insert(i + 1, "gt;");
-      }
-    }
-    for (let i = 0; i < args[arg].length; ++i) {
-      if (args[arg][i] === '/') {
-        args[arg][i] = '&';
-        args[arg] = args[arg].insert(i + 1, "#x2F;");
-      }
-    }
+    args[arg] = replaceSymbol(args[arg], '&', "&amp;");
+    args[arg] = replaceSymbol(args[arg], '<', "&lt;");
+    args[arg] = replaceSymbol(args[arg], '>', "&gt;");
+    args[arg] = replaceSymbol(args[arg], '/', "&#x2F;");
     while (data.search("{{" + arg + "}}") !== -1) {
       data = data.replace("{{" + arg + "}}", args[arg]);
     }
