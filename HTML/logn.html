@@ -73,8 +73,8 @@
 								setTimeout(reload, 1000);
 							} else if (data === 0) {
 								showAlert("alert-danger", "Wrong credentials");
-							} else if (data === -1) {
-							  showAlert("alert-danger", "500 Internal server error");
+							} else {
+							  showAlert("alert-danger", data);
 							}
 						},
 						error: function() {

@@ -180,18 +180,12 @@ function logn(request, response) {
         if (result.toString().length > 2) {
           response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result.toString()});
           response.write("1");
-        } else if (result === 0) {
+        } else {
           response.writeHead(200, {"Content-Type": "text/plain"});
-          response.write("0");
-        } else if (result === 1) {
-          response.writeHead(200, {"Content-Type": "text/plain"});
-          response.write("1")
-        } else if (result === -1) {
-          response.writeHead(500, {"Content-Type": "text/plain"});
-          response.write("-1")
+          response.write(result);
         }
       } else {
-        response.writeHead(500, {"Content-Type": "text/plain"});
+        response.writeHead(200, {"Content-Type": "text/plain"});
         response.write("-1");
       }
       response.end();

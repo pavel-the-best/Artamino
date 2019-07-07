@@ -28,6 +28,7 @@ async function createUser(request, name, textPassword, firstName, lastName) {
     const tryUser = await user.find(query).toArray();
     if (tryUser.length === 0) {
       const hashP = await bcrypt.hash(textPassword, saltRounds);
+      console.log(hashP)
       const theUser = {
         username: name,
         password: hashP,
@@ -49,7 +50,7 @@ async function createUser(request, name, textPassword, firstName, lastName) {
       return 0;
     }
   } catch (err) {
-    return -1;
+    throw err;
   }
 }
 
