@@ -1,4 +1,4 @@
-const http = require("http");
+const http = require("http2");
 const url = require("url");
 const router = require("./router.js");
 
