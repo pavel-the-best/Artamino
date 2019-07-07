@@ -70,7 +70,7 @@ async function login(request, response) {
 
 async function bootstrapCSS(request, response) {
   try {
-    const data = await reader.read("./static/css/bootstrap.css");
+    const data = await reader.read("./static/css/bootstrap.min.css");
     response.writeHead(200, {"Content-Type": "text/css"});
     response.write(data);
     response.end();
@@ -82,7 +82,7 @@ async function bootstrapCSS(request, response) {
 
 async function bootstrapJS(request, response) {
   try {
-    const data = await reader.read("./static/js/bootstrap.js");
+    const data = await reader.read("./static/js/bootstrap.min.js");
     response.writeHead(200, {"Content-Type": "text/js"});
     response.write(data);
     response.end();
@@ -94,7 +94,7 @@ async function bootstrapJS(request, response) {
 
 async function bootstrapCSSMap(request, response) {
   try {
-    const data = await reader.read("./static/css/bootstrap.css.map");
+    const data = await reader.read("./static/css/bootstrap.min.css.map");
     response.writeHead(200);
     response.write(data);
     response.end();
@@ -106,7 +106,7 @@ async function bootstrapCSSMap(request, response) {
 
 async function bootstrapJSMap(request, response) {
   try {
-    const data = await reader.read("./static/js/bootstrap.js.map");
+    const data = await reader.read("./static/js/bootstrap.min.js.map");
     response.writeHead(200);
     response.write(data);
     response.end();
