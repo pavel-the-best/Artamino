@@ -138,9 +138,9 @@ function regr(request, response) {
       let d = {};
       for (let i in data) {
         let b = data[i].split("=");
-        d[b[0]] = b[1];
+        d[b[0]] = decodeURIComponent(b[1]);
       }
-      if ("username" in d && "password" in d && "firstName" in d && "lastName" in d) {
+      if ("username" in d && "password" in d && "firstName" in d && "lastName" in d && d["username"] && d["password"] && d["firstName"] && d["lastName"]) {
         let result = await user.createUser(request, d["username"], d["password"], d["firstName"], d["lastName"]);
         result = result.toString();
         if (result.length > 2) {
@@ -173,9 +173,9 @@ function logn(request, response) {
       let d = {};
       for (let i in data) {
         let b = data[i].split("=");
-        d[b[0]] = b[1];
+        d[b[0]] = decodeURIComponent(b[1]);
       }
-      if ("username" in d && "password" in d) {
+      if ("username" in d && "password" in d && d["username"] && d["password"]) {
         let result = await user.checkPassword(request, d["username"], d["password"]);
         if (result.toString().length > 2) {
           response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result.toString()});
@@ -191,7 +191,8 @@ function logn(request, response) {
           response.write("-1")
         }
       } else {
-        response.write("1");
+        response.writeHead(500, {"Content-Type": "text/plain"});
+        response.write("-1");
       }
       response.end();
     } catch (err) {
@@ -204,11 +205,7 @@ function logn(request, response) {
 async function logOut(request, response) {
   try {
     await user.logOut(request);
-    const userInfo = await user.checkCookie(request);
     let args = {"user": "Not logged in"};
-    if (userInfo !== 0) {
-      args = {"user": "Logged in as " + userInfo["username"]};
-    }
     const data = await reader.read("./HTML/index.html", args);
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(data);
