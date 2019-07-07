@@ -5,9 +5,11 @@ const router = require("./router.js");
 function startServer(route, handle, host, port) {
   async function onRequest(request, response) {
     const pathname = url.parse(request.url).pathname;
-    const d = new Date();
-    const now = d.toLocaleString("ru");
-    console.log(now + " " + request.method + " Request for http://" + host + ":" + port + pathname + " recieved");
+    if (process.env.DEBUG) {
+      const d = new Date();
+      const now = d.toLocaleString("ru");
+      console.log(now + " " + request.method + " Request for http://" + host + ":" + port + pathname + " recieved");
+    }
     await router.route(pathname, handle, request, response);
   }
 
