@@ -118,7 +118,7 @@ async function bootstrapJSMap(request, response) {
 
 async function Jquery(request, response) {
   try {
-    const data = await reader.read("./static/jquery-3.3.1.min.js");
+    const data = await reader.read("./static/jquery-3.4.1.min.js");
     response.writeHead(200, {"Content-Type": "text/js"});
     response.write(data);
     response.end();
