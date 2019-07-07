@@ -135,7 +135,6 @@ function regr(request, response) {
   });
   request.addListener("end", async function () {
     try {
-      console.log(data);
       const d = qs.parse(data);
       if ("username" in d && "password" in d && "firstName" in d && "lastName" in d && d["username"].trim() && d["password"].trim() && d["firstName"].trim() && d["lastName"].trim()) {
         let result = await user.createUser(request, d["username"], d["password"], d["firstName"], d["lastName"]);
