@@ -56,7 +56,7 @@ async function createUser(request, name, textPassword, firstName, lastName) {
 async function checkCookie(request) {
   try {
     const c = parseCookies(request);
-    if (c && "auth" in c && c["auth"].length === 12) {
+    if (c && "auth" in c && (c["auth"].length === 12 || c["auth"].length === 24)) {
       const query = {
         _id: ObjectId(c["auth"]),
         user_agent: request.headers['user-agent']
