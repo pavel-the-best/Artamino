@@ -1,5 +1,6 @@
-const user = require("./user.js");
 const url = require("url");
+const qs = require("querystring");
+const user = require("./user.js");
 const reader = require("./reader.js");
 const chat = require("./chat.js");
 const error = require("./error.js");
@@ -134,13 +135,9 @@ function regr(request, response) {
   });
   request.addListener("end", async function () {
     try {
-      data = data.split("&");
-      let d = {};
-      for (let i in data) {
-        let b = data[i].split("=");
-        d[b[0]] = decodeURIComponent(b[1]);
-      }
-      if ("username" in d && "password" in d && "firstName" in d && "lastName" in d && d["username"] && d["password"] && d["firstName"] && d["lastName"]) {
+      console.log(data);
+      const d = qs.parse(data);
+      if ("username" in d && "password" in d && "firstName" in d && "lastName" in d && d["username"].trim() && d["password"].trim() && d["firstName"].trim() && d["lastName"].trim()) {
         let result = await user.createUser(request, d["username"], d["password"], d["firstName"], d["lastName"]);
         result = result.toString();
         if (result.length > 2) {
@@ -151,7 +148,7 @@ function regr(request, response) {
           response.write(result);
         }
       } else {
-        response.writeHead(500, {"Content-Type": "text/plain"});
+        response.writeHead(200, {"Content-Type": "text/plain"});
         response.write("-1");
       }
       response.end();
@@ -169,20 +166,15 @@ function logn(request, response) {
   });
   request.addListener("end", async function () {
     try {
-      data = data.split("&");
-      let d = {};
-      for (let i in data) {
-        let b = data[i].split("=");
-        d[b[0]] = decodeURIComponent(b[1]);
-      }
-      if ("username" in d && "password" in d && d["username"] && d["password"]) {
+      const d = qs.parse(data);
+      if ("username" in d && "password" in d && d["username"].trim() && d["password"].trim()) {
         let result = await user.checkPassword(request, d["username"], d["password"]);
         if (result.toString().length > 2) {
           response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result.toString()});
           response.write("1");
         } else {
           response.writeHead(200, {"Content-Type": "text/plain"});
-          response.write(result);
+          response.write(result.toString());
         }
       } else {
         response.writeHead(200, {"Content-Type": "text/plain"});

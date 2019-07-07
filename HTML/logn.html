@@ -74,11 +74,11 @@
 							} else if (data === 0) {
 								showAlert("alert-danger", "Wrong credentials");
 							} else {
-							  showAlert("alert-danger", data);
+								showAlert("alert-danger", "Nope :)");
 							}
 						},
-						error: function() {
-							showAlert("alert-danger", "Failed connection, check console")
+						error: function(err, data) {
+							showAlert("alert-danger", "Failed connection (" + data + ")");
 						}
 					})
 				}

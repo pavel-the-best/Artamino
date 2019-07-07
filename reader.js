@@ -12,7 +12,7 @@ String.prototype.insert = function (index, string) {
 function replaceSymbol(string, symbol, replacement) {
   for (let i = 0; i < string.length; ++i) {
     if (string[i] === symbol) {
-      string[i] = replacement[0];
+      string = string.substring(0, i) + replacement[0] + string.substring(i + 1, string.length);
       string = string.insert(i + 1, replacement.substring(1, replacement.length));
       i += replacement.length - 1;
     }
@@ -28,6 +28,8 @@ async function read(fileName, args = {}) {
     args[arg] = replaceSymbol(args[arg], '<', "&lt;");
     args[arg] = replaceSymbol(args[arg], '>', "&gt;");
     args[arg] = replaceSymbol(args[arg], '/', "&#x2F;");
+    args[arg] = replaceSymbol(args[arg], '"', "&quot;");
+    args[arg] = replaceSymbol(args[arg], '\'', "&#x27;");
     while (data.search("{{" + arg + "}}") !== -1) {
       data = data.replace("{{" + arg + "}}", args[arg]);
     }
