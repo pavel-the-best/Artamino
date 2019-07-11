@@ -1,6 +1,6 @@
 const index = require("./index.js");
 const bcrypt = require("bcrypt");
-const ObjectId = require("mongodb").ObjectId;
+const ObjectID = require("mongodb").ObjectId;
 
 function parseCookies(request) {
   let cookies = request.headers.cookie;
@@ -53,27 +53,30 @@ async function createUser(request, name, textPassword, firstName, lastName) {
   }
 }
 
+async function getUserInfo(userID) {
+  try {
+    const user = await index.getCollection("auth", "user");
+    const userQuery = {
+      _id: ObjectID(userID)
+    };
+    return await user.findOne(userQuery);
+  } catch(err) {
+    throw err;
+  }
+}
+
 async function checkCookie(request) {
   try {
     const c = parseCookies(request);
     if (c && "auth" in c && (c["auth"].length === 12 || c["auth"].length === 24)) {
       const query = {
-        _id: ObjectId(c["auth"]),
+        _id: ObjectID(c["auth"]),
         user_agent: request.headers['user-agent']
       };
       const auth = await index.getCollection("auth", "auth");
       const searchResult = await auth.find(query).toArray();
       if (searchResult.length !== 0) {
-        const userQuery = {
-          _id: ObjectId(searchResult[0]["user_id"])
-        };
-        const user = await index.getCollection("auth", "user");
-        const resultUser = await user.find(userQuery).toArray();
-        if (resultUser.length) {
-          return resultUser[0];
-        } else {
-          return 0;
-        }
+        return await getUserInfo(searchResult[0]["user_id"]);
       } else {
         return 0;
       }
@@ -92,7 +95,7 @@ async function logOut(request) {
       const auth = await index.getCollection("auth", "auth");
       const c = parseCookies(request);
       const query = {
-        _id: ObjectId(c["auth"])
+        _id: ObjectID(c["auth"])
       };
       await auth.deleteOne(query);
     }
@@ -138,3 +141,4 @@ exports.createUser = createUser;
 exports.checkPassword = checkPassword;
 exports.checkCookie = checkCookie;
 exports.logOut = logOut;
+exports.getUserInfo = getUserInfo;

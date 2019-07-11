@@ -9,7 +9,7 @@ async function start(request, response) {
   try {
     const userInfo = await user.checkCookie(request);
     let args = {"user": "Not logged in"};
-    if (userInfo !== 0) {
+    if (userInfo) {
       args = {"user": "Logged in as " + userInfo["username"]};
     }
     const data = await reader.read("./HTML/index.html", args);
@@ -38,7 +38,7 @@ async function register(request, response) {
   try {
     const userInfo = await user.checkCookie(request);
     let args = {"user": "Not logged in"};
-    if (userInfo !== 0) {
+    if (userInfo) {
       args = {"user": "Logged in as " + userInfo["username"]};
     }
     const data = await reader.read("./HTML/regr.html", args);
@@ -55,7 +55,7 @@ async function login(request, response) {
   try {
     const userInfo = await user.checkCookie(request);
     let args = {"user": "Not logged in"};
-    if (userInfo !== 0) {
+    if (userInfo) {
       args = {"user": "Logged in as " + userInfo["username"]};
     }
     const data = await reader.read("./HTML/logn.html", args);
