@@ -1,10 +1,13 @@
 const reader = require('./reader.js');
 
+let errorNames = {
+  400: "Bad Request",
+  401: "Unauthorized",
+  404: "Not Found",
+  500: "Internal Server Error",
+};
+
 async function writeHTMLError(errorCode, response) {
-  let errorNames = {
-    404: "Not Found",
-    500: "Internal Server Error",
-  };
   let data = await reader.read("./HTML/error.html", {"code": errorCode, "name": errorNames[errorCode]});
   response.writeHead(errorCode, {"Content-Type": "text/html"});
   response.write(data);
@@ -12,10 +15,6 @@ async function writeHTMLError(errorCode, response) {
 }
 
 function writeError(errorCode, response) {
-  let errorNames = {
-    404: "Not Found",
-    500: "Internal Server Error",
-  };
   response.writeHead(errorCode);
   response.write(errorCode + ' ' + errorNames[errorCode]);
   response.end();

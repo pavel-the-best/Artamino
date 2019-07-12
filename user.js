@@ -4,7 +4,7 @@ const ObjectID = require("mongodb").ObjectId;
 
 function parseCookies(request) {
   let cookies = request.headers.cookie;
-  if (cookies === undefined) {
+  if (!cookies) {
     return undefined;
   }
   cookies = cookies.split(';');
@@ -91,7 +91,7 @@ async function checkCookie(request) {
 async function logOut(request) {
   try {
     const result = await checkCookie(request);
-    if (result !== 0) {
+    if (result) {
       const auth = await index.getCollection("auth", "auth");
       const c = parseCookies(request);
       const query = {
@@ -107,7 +107,7 @@ async function logOut(request) {
 async function checkPassword(request, name, passwordToCheck) {
   try {
     const res1 = await checkCookie(request);
-    if (res1 === 0) {
+    if (!res1) {
       const user = await index.getCollection("auth", "user");
       const query = {
         username: name

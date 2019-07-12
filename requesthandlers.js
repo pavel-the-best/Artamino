@@ -18,7 +18,7 @@ async function start(request, response) {
     response.end();
   } catch (err) {
     await error.writeHTMLError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -30,7 +30,7 @@ async function style(request, response) {
     response.end();
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -47,7 +47,7 @@ async function register(request, response) {
     response.end();
   } catch (err) {
     await error.writeHTMLError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -64,7 +64,7 @@ async function login(request, response) {
     response.end();
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -76,7 +76,7 @@ async function bootstrapCSS(request, response) {
     response.end();
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -88,7 +88,7 @@ async function bootstrapJS(request, response) {
     response.end();
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -100,7 +100,7 @@ async function bootstrapCSSMap(request, response) {
     response.end();
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -112,7 +112,7 @@ async function bootstrapJSMap(request, response) {
     response.end();
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -124,7 +124,7 @@ async function Jquery(request, response) {
     response.end();
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
@@ -153,7 +153,7 @@ function regr(request, response) {
       response.end();
     } catch (err) {
       error.writeError(500, response);
-      throw err;
+      console.error(err);
     }
   })
 }
@@ -182,7 +182,7 @@ function logn(request, response) {
       response.end();
     } catch (err) {
       error.writeError(500, response);
-      throw err;
+      console.error(err);
     }
   });
 }
@@ -190,39 +190,54 @@ function logn(request, response) {
 async function logOut(request, response) {
   try {
     await user.logOut(request);
-    let args = {"user": "Not logged in"};
+    const args = {"user": "Not logged in"};
     const data = await reader.read("./HTML/index.html", args);
     response.writeHead(200, {"Content-Type": "text/html"});
     response.write(data);
     response.end();
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
   }
 }
 
 async function createMessage(request, response) {
   try {
-    let query = url.parse(request.url).query;
-    let dict = {};
-    query = query.split('&');
-    for (let i in query) {
-      let x = query[i].split('=');
-      dict[x[0]] = x[1];
-    }
-    if ("text" in dict) {
-      await chat.createMessage(request, dict["text"]);
-      response.writeHead(200);
-      response.write("Done!");
-      response.end();
+    if (request.method === "GET") {
+      const query = qs.parse(url.parse(request.url).query);
+      if ("text" in query) {
+        if (await chat.createMessage(request, query["text"])) {
+          response.writeHead(200, "Content-Type: text/plain");
+          response.write("Done!");
+          response.end();
+        } else {
+          error.writeError(401, response);
+        }
+      } else {
+        error.writeError(400, response);
+      }
     } else {
-      response.writeHead(400);
-      response.write("400 Bad Request");
-      response.end();
+      error.writeError(400, response);
     }
   } catch (err) {
     error.writeError(500, response);
-    throw err;
+    console.error(err);
+  }
+}
+
+async function getAllMessages(request, response) {
+  try {
+    const messages = await chat.getAllMessages(request);
+    if (messages.length) {
+      response.writeHead(200, "Content-Type: text/plain");
+      response.write(JSON.stringify(messages, '\n', '\t'));
+      response.end()
+    } else {
+      error.writeError(401, response);
+    }
+  } catch (err) {
+    error.writeError(500, response);
+    console.error(err);
   }
 }
 
@@ -239,3 +254,4 @@ exports.regr = regr;
 exports.logn = logn;
 exports.logOut = logOut;
 exports.createMessage = createMessage;
+exports.getAllMessages = getAllMessages;

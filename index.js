@@ -18,6 +18,7 @@ handle["/regr"] = requestHandlers.regr;
 handle["/logn"] = requestHandlers.logn;
 handle["/logout"] = requestHandlers.logOut;
 handle["/createMessage"] = requestHandlers.createMessage;
+handle["/getAllMessages"] = requestHandlers.getAllMessages;
 
 const host = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || 8080;
@@ -35,7 +36,7 @@ async function getClient() {
     client = result;
     return result;
   } catch (err) {
-    throw err;
+    console.error(err);
   }
 }
 
@@ -49,7 +50,7 @@ async function getDB(name) {
       return dbs[name]
     }
   } catch (err) {
-    throw err;
+    console.error(err);
   }
 }
 
@@ -69,7 +70,7 @@ async function getCollection(dbName, name) {
       collections[dbName][name] = await db.collection(name);
     }
   } catch (err) {
-    throw err;
+    console.error(err);
   }
 }
 

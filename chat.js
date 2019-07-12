@@ -5,7 +5,7 @@ const index = require("./index.js");
 async function createMessage(request, text) {
   try {
     const userInfo = await user.checkCookie(request);
-    if (userInfo === 0) {
+    if (!userInfo) {
       return 0;
     }
     const message = await index.getCollection("message", "message");
@@ -26,12 +26,12 @@ async function createMessage(request, text) {
 async function getAllMessages(request) {
   try {
     const userInfo = await user.checkCookie(request);
-    if (userInfo === 0) {
-      return [0, []];
+    if (!userInfo) {
+      return [];
     }
     const message = await index.getCollection("message", "message");
     const messages = await message.find().toArray();
-    return [0, parseMessages(messages)]
+    return parseMessages(messages);
   } catch(err) {
     throw err;
   }
@@ -40,16 +40,19 @@ async function getAllMessages(request) {
 async function parseMessages(messages) {
   try {
     for (let i in messages) {
+      const userInfo = await user.getUserInfo(messages[i]["user_id"]);
+      if (userInfo) delete userInfo.password;
       messages[i] = {
         text: messages[i]["text"],
-        user: user.getUserInfo(messages[i]["user_id"]),
+        user: userInfo,
         created: messages[i]["created"]
       };
     }
-    return messages;
+    return Promise.resolve(messages);
   } catch(err) {
     throw err;
   }
 }
 
 exports.createMessage = createMessage;
+exports.getAllMessages = getAllMessages;
