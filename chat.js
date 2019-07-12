@@ -29,26 +29,32 @@ async function getAllMessages(request) {
     if (!userInfo) {
       return [0, []];
     }
-    const message = await index.getCollection("message", "message");
+    let message = index.getCollection("message", "message");
+    const authUser = await index.getCollection("auth", "user");
+    const userList = await authUser.find().toArray();
+    const userDict = {};
+    for (let i in userList) {
+      delete userList[i].password;
+      userDict[userList[i]["_id"]] = userList[i];
+    }
+    message = await message;
     const messages = await message.find().toArray();
-    return await [1, await parseMessages(messages)];
+    return [1, parseMessages(messages, userDict)];
   } catch(err) {
     throw err;
   }
 }
 
-async function parseMessages(messages) {
+function parseMessages(messages, userDict) {
   try {
     for (let i in messages) {
-      const userInfo = await user.getUserInfo(messages[i]["user_id"]);
-      if (userInfo) delete userInfo.password;
       messages[i] = {
         text: messages[i]["text"],
-        user: userInfo,
+        user: userDict[messages[i]["user_id"]],
         created: messages[i]["created"]
       };
     }
-    return Promise.resolve(messages);
+    return messages;
   } catch(err) {
     throw err;
   }
