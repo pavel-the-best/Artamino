@@ -31,7 +31,7 @@ async function getAllMessages(request) {
     }
     const message = await index.getCollection("message", "message");
     const messages = await message.find().toArray();
-    return [1, parseMessages(messages)];
+    return await [1, await parseMessages(messages)];
   } catch(err) {
     throw err;
   }
