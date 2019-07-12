@@ -70,7 +70,7 @@ async function login(request, response) {
 
 async function bootstrapCSS(request, response) {
   try {
-    const data = await reader.read("./static/css/bootstrap.min.css");
+    const data = await reader.read("./static/bootstrap.min.css");
     response.writeHead(200, {"Content-Type": "text/css"});
     response.write(data);
     response.end();
@@ -82,32 +82,8 @@ async function bootstrapCSS(request, response) {
 
 async function bootstrapJS(request, response) {
   try {
-    const data = await reader.read("./static/js/bootstrap.min.js");
+    const data = await reader.read("./static/bootstrap.min.js");
     response.writeHead(200, {"Content-Type": "text/js"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    error.writeError(500, response);
-    console.error(err);
-  }
-}
-
-async function bootstrapCSSMap(request, response) {
-  try {
-    const data = await reader.read("./static/css/bootstrap.min.css.map");
-    response.writeHead(200);
-    response.write(data);
-    response.end();
-  } catch (err) {
-    error.writeError(500, response);
-    console.error(err);
-  }
-}
-
-async function bootstrapJSMap(request, response) {
-  try {
-    const data = await reader.read("./static/js/bootstrap.min.js.map");
-    response.writeHead(200);
     response.write(data);
     response.end();
   } catch (err) {
@@ -230,7 +206,7 @@ async function getAllMessages(request, response) {
     const messages = await chat.getAllMessages(request);
     if (messages[0]) {
       response.writeHead(200, "Content-Type: text/plain");
-      response.write(JSON.stringify(messages, '\n', '\t'));
+      response.write(JSON.stringify(messages[1], '\n', '  '));
       response.end()
     } else {
       error.writeError(401, response);
@@ -248,8 +224,6 @@ exports.login = login;
 exports.bootstrapCSS = bootstrapCSS;
 exports.bootstrapJS = bootstrapJS;
 exports.Jquery = Jquery;
-exports.bootstrapCSSMap = bootstrapCSSMap;
-exports.bootstrapJSMap = bootstrapJSMap;
 exports.regr = regr;
 exports.logn = logn;
 exports.logOut = logOut;
