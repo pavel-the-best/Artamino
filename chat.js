@@ -27,11 +27,11 @@ async function getAllMessages(request) {
   try {
     const userInfo = await user.checkCookie(request);
     if (!userInfo) {
-      return [];
+      return [0, []];
     }
     const message = await index.getCollection("message", "message");
     const messages = await message.find().toArray();
-    return parseMessages(messages);
+    return [0, parseMessages(messages)];
   } catch(err) {
     throw err;
   }

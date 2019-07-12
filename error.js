@@ -1,4 +1,4 @@
-const reader = require('./reader.js');
+const reader = require("./reader.js");
 
 let errorNames = {
   400: "Bad Request",

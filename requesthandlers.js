@@ -228,7 +228,7 @@ async function createMessage(request, response) {
 async function getAllMessages(request, response) {
   try {
     const messages = await chat.getAllMessages(request);
-    if (messages.length) {
+    if (messages[0]) {
       response.writeHead(200, "Content-Type: text/plain");
       response.write(JSON.stringify(messages, '\n', '\t'));
       response.end()
