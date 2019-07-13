@@ -114,13 +114,12 @@ function regr(request, response) {
       const d = qs.parse(data);
       if ("username" in d && "password" in d && "firstName" in d && "lastName" in d && d["username"].trim() && d["password"].trim() && d["firstName"].trim() && d["lastName"].trim()) {
         let result = await user.createUser(request, d["username"], d["password"], d["firstName"], d["lastName"]);
-        result = result.toString();
-        if (result.length > 2) {
-          response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result});
-          response.write("1")
-        } else {
+        if (typeof result == "number") {
           response.writeHead(200, {"Content-Type": "text/plain"});
-          response.write(result);
+          response.write(result.toString());
+        } else {
+          response.writeHead(200, {"Content-Type": "text/plain", "Set-Cookie": "auth=" + result});
+          response.write("1");
         }
       } else {
         response.writeHead(200, {"Content-Type": "text/plain"});
@@ -131,7 +130,7 @@ function regr(request, response) {
       error.writeError(500, response);
       console.error(err);
     }
-  })
+  });
 }
 
 function logn(request, response) {
@@ -207,7 +206,7 @@ async function getAllMessages(request, response) {
     if (messages[0]) {
       response.writeHead(200, "Content-Type: text/plain");
       response.write(JSON.stringify(messages[1], '\n', '  '));
-      response.end()
+      response.end();
     } else {
       error.writeError(401, response);
     }

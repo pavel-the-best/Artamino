@@ -19,14 +19,26 @@ function parseCookies(request) {
 
 const saltRounds = 11;
 
+async function createSession(request, userID) {
+  let auth = index.getCollection("auth", "auth");
+  const u_a = request.headers["user-agent"];
+  const authQuery = {
+    user_agent: u_a,
+    user_id: userID
+  };
+  auth = await auth;
+  const res = await auth.insertOne(authQuery);
+  return res.insertedId;
+}
+
 async function createUser(request, name, textPassword, firstName, lastName) {
   try {
     const user = await index.getCollection("auth", "user");
     const query = {
       username: name
     };
-    const tryUser = await user.find(query).toArray();
-    if (tryUser.length === 0) {
+    const tryUser = await user.findOne(query);
+    if (!tryUser) {
       const hashP = await bcrypt.hash(textPassword, saltRounds);
       const theUser = {
         username: name,
@@ -35,16 +47,7 @@ async function createUser(request, name, textPassword, firstName, lastName) {
         last_name: lastName
       };
       await user.insertOne(theUser);
-      console.log("user " + name + " successfully created");
-      let auth = index.getCollection("auth", "auth");
-      const u_a = request.headers['user-agent'];
-      const authQuery = {
-        user_agent: u_a,
-        user_id: theUser._id
-      };
-      auth = await auth;
-      const res = await auth.insertOne(authQuery);
-      return res.insertedId;
+      return await createSession(request, theUser._id);
     } else {
       return 0;
     }
@@ -71,12 +74,12 @@ async function checkCookie(request) {
     if (c && "auth" in c && (c["auth"].length === 12 || c["auth"].length === 24)) {
       const query = {
         _id: ObjectID(c["auth"]),
-        user_agent: request.headers['user-agent']
+        user_agent: request.headers["user-agent"]
       };
       const auth = await index.getCollection("auth", "auth");
-      const searchResult = await auth.find(query).toArray();
-      if (searchResult.length !== 0) {
-        return await getUserInfo(searchResult[0]["user_id"]);
+      const searchResult = await auth.findOne(query);
+      if (searchResult) {
+        return await getUserInfo(searchResult["user_id"]);
       } else {
         return 0;
       }
@@ -106,31 +109,28 @@ async function logOut(request) {
 
 async function checkPassword(request, name, passwordToCheck) {
   try {
-    const res1 = await checkCookie(request);
-    if (!res1) {
-      const user = await index.getCollection("auth", "user");
+    const loggedIn = await checkCookie(request);
+    const user = await index.getCollection("auth", "user");
+    const query = {
+      username: name
+    };
+    const searchResult = await user.findOne(query).toArray();
+    let result = false;
+    if (searchResult) {
+      result = await bcrypt.compare(passwordToCheck, searchResult[0]["password"]);
+    }
+    if (result) {
+      if (loggedIn) await logOut(request);
+      const u_a = request.headers["user-agent"];
       const query = {
-        username: name
+        user_id: searchResult[0]["_id"],
+        user_agent: u_a
       };
-      const searchResult = await user.find(query).toArray();
-      let result = false;
-      if (searchResult.length !== 0) {
-        result = await bcrypt.compare(passwordToCheck, searchResult[0]["password"]);
-      }
-      if (result) {
-        const u_a = request.headers['user-agent'];
-        const query = {
-          user_id: searchResult[0]["_id"],
-          user_agent: u_a
-        };
-        const auth = await index.getCollection("auth", "auth");
-        const res = await auth.insertOne(query);
-        return res.insertedId;
-      } else {
-        return 0;
-      }
+      const auth = await index.getCollection("auth", "auth");
+      const res = await auth.insertOne(query);
+      return res.insertedId;
     } else {
-      return 1;
+      return 0;
     }
   } catch (err) {
     throw err;

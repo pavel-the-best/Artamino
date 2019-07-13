@@ -9,12 +9,9 @@ async function createMessage(request, text) {
       return 0;
     }
     const message = await index.getCollection("message", "message");
-    const date = new Date();
-    const milliseconds = date.getTime();
     const query = {
       text: text,
       user_id: ObjectID(userInfo._id),
-      created: milliseconds
     };
     await message.insertOne(query);
     return 1;
@@ -51,7 +48,7 @@ function parseMessages(messages, userDict) {
       messages[i] = {
         text: messages[i]["text"],
         user: userDict[messages[i]["user_id"]],
-        created: messages[i]["created"]
+        created: ObjectID(messages[i]["_id"]).getTimestamp().getTime()
       };
     }
     return messages;
