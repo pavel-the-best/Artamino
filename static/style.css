@@ -5,3 +5,7 @@
 .theInputGroup{
 	margin: 1em 1em 0.25em;
 }
+
+html, body, .container-fluid {
+    height: 100%
+}

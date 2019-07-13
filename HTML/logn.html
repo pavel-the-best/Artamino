@@ -1,4 +1,5 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ru">
 	<head>
 		<meta charset="utf-8">
 		<title>Login</title>
@@ -10,24 +11,24 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
 	</head>
 	<body>
-		<div class="container-fluid">
-			<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-				<span class="navbar-brand">TheProject</span>
-				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="collapse navbar-collapse" id="navbarNav">
-					<div class="navbar-nav d-flex w-100">
-						<a class="nav-item nav-link" href="/">Home</a>
-						<a class="nav-item nav-link" href="/register">Register</a>
-						<a class="nav-item nav-link active" href="#">Login <span class="sr-only">(current)</span></a>
-						<div class="d-lg-flex ml-auto">
-							<span class="d-flex navbar-text ml-auto">{{user}}</span>
-							<a class="nav-item nav-link active ml-auto" href="/logout">Log out</a>
-						</div>
+		<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+			<span class="navbar-brand">TheProject</span>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<div class="navbar-nav d-flex w-100">
+					<a class="nav-item nav-link" href="/">Home</a>
+					<a class="nav-item nav-link" href="/register">Register</a>
+					<a class="nav-item nav-link active" href="#">Login <span class="sr-only">(current)</span></a>
+					<div class="d-lg-flex ml-auto">
+						<span class="d-flex navbar-text ml-auto">{{user}}</span>
+						<a class="nav-item nav-link active ml-auto" href="/logout">Log out</a>
 					</div>
 				</div>
-			</nav>
+			</div>
+		</nav>
+		<div class="container-fluid">
 			<div class="d-flex h-100 w-100 justify-content-center align-items-center">
 				<div class="col-lg-6 col-xs-6 col-xs-12 d-flex flex-column justify-content-center align-items-center">
 					<div>
