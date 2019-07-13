@@ -2,6 +2,8 @@ const index = require("./index.js");
 const bcrypt = require("bcrypt");
 const ObjectID = require("mongodb").ObjectId;
 
+const saltRounds = 11;
+
 function parseCookies(request) {
   let cookies = request.headers.cookie;
   if (!cookies) {
@@ -16,8 +18,6 @@ function parseCookies(request) {
   }
   return d;
 }
-
-const saltRounds = 11;
 
 async function createSession(request, userID) {
   let auth = index.getCollection("auth", "auth");
@@ -35,13 +35,14 @@ async function createUser(request, name, textPassword, firstName, lastName) {
   try {
     const user = await index.getCollection("auth", "user");
     const query = {
-      username: name
+      username_insensitive: name.toLowerCase()
     };
     const tryUser = await user.findOne(query);
     if (!tryUser) {
       const hashP = await bcrypt.hash(textPassword, saltRounds);
       const theUser = {
         username: name,
+        username_insensitive: name.toLowerCase(),
         password: hashP,
         first_name: firstName,
         last_name: lastName
@@ -74,7 +75,7 @@ async function checkCookie(request) {
     if (c && "auth" in c && (c["auth"].length === 12 || c["auth"].length === 24)) {
       const query = {
         _id: ObjectID(c["auth"]),
-        user_agent: request.headers["user-agent"]
+        user_agent: request.headers["user-agent"],
       };
       const auth = await index.getCollection("auth", "auth");
       const searchResult = await auth.findOne(query);
@@ -114,21 +115,14 @@ async function checkPassword(request, name, passwordToCheck) {
     const query = {
       username: name
     };
-    const searchResult = await user.findOne(query).toArray();
+    const searchResult = await user.findOne(query);
     let result = false;
     if (searchResult) {
-      result = await bcrypt.compare(passwordToCheck, searchResult[0]["password"]);
+      result = await bcrypt.compare(passwordToCheck, searchResult["password"]);
     }
     if (result) {
       if (loggedIn) await logOut(request);
-      const u_a = request.headers["user-agent"];
-      const query = {
-        user_id: searchResult[0]["_id"],
-        user_agent: u_a
-      };
-      const auth = await index.getCollection("auth", "auth");
-      const res = await auth.insertOne(query);
-      return res.insertedId;
+      return await createSession(request, ObjectID(searchResult["_id]"]));
     } else {
       return 0;
     }

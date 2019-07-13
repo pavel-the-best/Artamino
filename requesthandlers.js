@@ -13,7 +13,7 @@ async function start(request, response) {
       args = {"user": "Logged in as " + userInfo["username"]};
     }
     const data = await reader.read("./HTML/index.html", args);
-    response.writeHead(200, {"Content-Type": "text/html"});
+    response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
     response.write(data);
     response.end();
   } catch (err) {
@@ -25,7 +25,7 @@ async function start(request, response) {
 async function style(request, response) {
   try {
     const data = await reader.read("./static/style.css");
-    response.writeHead(200, {"Content-Type": "text/css"});
+    response.writeHead(200, {"Content-Type": "text/css", "Cache-Control": "public, max-age=31536000"});
     response.write(data);
     response.end();
   } catch (err) {
@@ -42,7 +42,7 @@ async function register(request, response) {
       args = {"user": "Logged in as " + userInfo["username"]};
     }
     const data = await reader.read("./HTML/regr.html", args);
-    response.writeHead(200, {"Content-Type": "text/html"});
+    response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
     response.write(data);
     response.end();
   } catch (err) {
@@ -59,7 +59,7 @@ async function login(request, response) {
       args = {"user": "Logged in as " + userInfo["username"]};
     }
     const data = await reader.read("./HTML/logn.html", args);
-    response.writeHead(200, {"Content-Type": "text/html"});
+    response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
     response.write(data);
     response.end();
   } catch (err) {
@@ -71,7 +71,7 @@ async function login(request, response) {
 async function bootstrapCSS(request, response) {
   try {
     const data = await reader.read("./static/bootstrap.min.css");
-    response.writeHead(200, {"Content-Type": "text/css"});
+    response.writeHead(200, {"Content-Type": "text/css", "Cache-Control": "public, max-age=31536000"});
     response.write(data);
     response.end();
   } catch (err) {
@@ -83,7 +83,7 @@ async function bootstrapCSS(request, response) {
 async function bootstrapJS(request, response) {
   try {
     const data = await reader.read("./static/bootstrap.min.js");
-    response.writeHead(200, {"Content-Type": "text/js"});
+    response.writeHead(200, {"Content-Type": "text/js", "Cache-Control": "public, max-age=31536000"});
     response.write(data);
     response.end();
   } catch (err) {
@@ -95,7 +95,7 @@ async function bootstrapJS(request, response) {
 async function Jquery(request, response) {
   try {
     const data = await reader.read("./static/jquery-3.4.1.min.js");
-    response.writeHead(200, {"Content-Type": "text/js"});
+    response.writeHead(200, {"Content-Type": "text/js", "Cache-Control": "public, max-age=31536000"});
     response.write(data);
     response.end();
   } catch (err) {
@@ -204,7 +204,7 @@ async function getAllMessages(request, response) {
   try {
     const messages = await chat.getAllMessages(request);
     if (messages[0]) {
-      response.writeHead(200, "Content-Type: text/plain");
+      response.writeHead(200, {"Content-Type": "text/plain", "Cache-Control": "no-cache, no-store"});
       response.write(JSON.stringify(messages[1], '\n', '  '));
       response.end();
     } else {
