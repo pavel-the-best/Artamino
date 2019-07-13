@@ -25,7 +25,7 @@ async function start(request, response) {
 async function style(request, response) {
   try {
     const data = await reader.read("./static/style.css");
-    response.writeHead(200, {"Content-Type": "text/css", "Cache-Control": "public, max-age=31536000"});
+    response.writeHead(200, {"Content-Type": "text/css", "Cache-Control": "public, max-age=3600"});
     response.write(data);
     response.end();
   } catch (err) {
