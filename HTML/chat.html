@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link rel="stylesheet" type ="text/css" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+</head>
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <span class="navbar-brand">TheProject</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav d-flex w-100">
+                <a class="nav-item nav-link" href="/">Home</a>
+                <a class="nav-item nav-link" href="/register">Register</a>
+                <a class="nav-item nav-link" href="/login">Login</a>
+                <a class="nav-item nav-link active" href="#">Chat <span class="sr-only">(current)</span></a>
+                <div class="d-lg-flex ml-auto">
+                    <span class="d-flex navbar-text ml-auto">{{user}}</span>
+                    <a class="nav-item nav-link active ml-auto" href="/logout">Log out</a>
+                </div>
+            </div>`
+        </div>
+    </nav>
+    <div class="input-group mb-1 fixed-bottom w-100">
+        <label for="message"></label><input type="text" name="message" class="form-control p-1" value="" placeholder="Write a message" id="message">
+        <div class="input-group-prepend">
+            <span><div class="btn bg-primary" id="sender"><i class="fas fa-arrow-circle-right white"></i></div></span>
+        </div>
+    </div>
+</body>
+</html>

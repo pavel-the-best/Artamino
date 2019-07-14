@@ -6,6 +6,10 @@
 	margin: 1em 1em 0.25em;
 }
 
-html, body, .container-fluid {
+.white {
+	color: #ffffff;
+}
+
+html, body {
     height: 100%
 }

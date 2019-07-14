@@ -2,7 +2,7 @@ const url = require("url");
 const qs = require("querystring");
 const user = require("./user.js");
 const reader = require("./reader.js");
-const chat = require("./chat.js");
+const chatter = require("./chat.js");
 const error = require("./error.js");
 
 async function start(request, response) {
@@ -59,6 +59,23 @@ async function login(request, response) {
       args = {"user": "Logged in as " + userInfo["username"]};
     }
     const data = await reader.read("./HTML/logn.html", args);
+    response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
+    response.write(data);
+    response.end();
+  } catch (err) {
+    error.writeError(500, response);
+    console.error(err);
+  }
+}
+
+async function chat(request, response) {
+  try {
+    const userInfo = await user.checkCookie(request);
+    let args = {"user": "Not logged in"};
+    if (userInfo) {
+      args = {"user": "Logged in as " + userInfo["username"]};
+    }
+    const data = await reader.read("./HTML/chat.html", args);
     response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
     response.write(data);
     response.end();
@@ -181,7 +198,7 @@ async function createMessage(request, response) {
     if (request.method === "GET") {
       const query = qs.parse(url.parse(request.url).query);
       if ("text" in query) {
-        if (await chat.createMessage(request, query["text"])) {
+        if (await chatter.createMessage(request, query["text"])) {
           response.writeHead(200, "Content-Type: text/plain");
           response.write("Done!");
           response.end();
@@ -202,7 +219,7 @@ async function createMessage(request, response) {
 
 async function getAllMessages(request, response) {
   try {
-    const messages = await chat.getAllMessages(request);
+    const messages = await chatter.getAllMessages(request);
     if (messages[0]) {
       response.writeHead(200, {"Content-Type": "text/plain", "Cache-Control": "no-cache, no-store"});
       response.write(JSON.stringify(messages[1], '\n', '  '));
@@ -220,6 +237,7 @@ exports.start = start;
 exports.style = style;
 exports.register = register;
 exports.login = login;
+exports.chat = chat;
 exports.bootstrapCSS = bootstrapCSS;
 exports.bootstrapJS = bootstrapJS;
 exports.Jquery = Jquery;
