@@ -199,7 +199,7 @@ async function createMessage(request, response) {
       const query = qs.parse(url.parse(request.url).query);
       if ("text" in query) {
         if (await chatter.createMessage(request, query["text"])) {
-          response.writeHead(200, "Content-Type: text/plain");
+          response.writeHead(200, {"Content-Type": "text/plain"});
           response.write("Done!");
           response.end();
         } else {

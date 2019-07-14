@@ -1,15 +1,15 @@
 .text {
-	font-size: 5vw;
+    font-size: 5vw;
 }
 
 .theInputGroup{
-	margin: 1em 1em 0.25em;
+    margin: 1em 1em 0.25em;
 }
 
 .white {
-	color: #ffffff;
+    color: #ffffff;
 }
 
-html, body {
-    height: 100%
+html, body, .container-fluid {
+	height: 100%
 }

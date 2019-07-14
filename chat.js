@@ -44,12 +44,14 @@ async function getAllMessages(request) {
 
 function parseMessages(messages, userDict) {
   try {
+    console.log(messages, userDict);
     for (let i in messages) {
       messages[i] = {
         text: messages[i]["text"],
         user: userDict[messages[i]["user_id"]],
         created: ObjectID(messages[i]["_id"]).getTimestamp().getTime()
       };
+      console.log(messages[i]);
     }
     return messages;
   } catch(err) {

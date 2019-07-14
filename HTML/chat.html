@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 </head>
 <body>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <span class="navbar-brand">TheProject</span>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -29,11 +29,56 @@
             </div>`
         </div>
     </nav>
-    <div class="input-group mb-1 fixed-bottom w-100">
-        <label for="message"></label><input type="text" name="message" class="form-control p-1" value="" placeholder="Write a message" id="message">
-        <div class="input-group-prepend">
-            <span><div class="btn bg-primary" id="sender"><i class="fas fa-arrow-circle-right white"></i></div></span>
+    <div class="container-fluid">
+        <div class="flex-column w-100" id="chat">
+        </div>
+        <div class="input-group mb-1 fixed-bottom w-100">
+            <label for="message"></label><input autofoecus type="text" name="message" class="form-control p-1" value="" placeholder="Write a message" id="message">
+            <div class="input-group-prepend">
+                <div class="btn bg-primary" id="sender"><i class="fas fa-arrow-circle-right white"></i></div>
+            </div>
         </div>
     </div>
+    <script>
+        function parseMessages(messages) {
+            const chat = $("#chat");
+            chat[0].innerHTML = "";
+            for (let i in messages) {
+              chat.append("<div class=\"d-flex\">" + messages[i].text + "</div>");
+            }
+        }
+
+        function getAllMessages() {
+          $.ajax({
+            url: "/getAllMessages",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+              parseMessages(data);
+            }
+          });
+        }
+
+        getAllMessages();
+
+        $("#sender").click(function() {
+          const messageText = $("#message")[0].value;
+          if (messageText) {
+            $.ajax({
+              url: "/createMessage",
+              method: "GET",
+              data: {
+                text: messageText
+              },
+              success: function() {
+                getAllMessages();
+              },
+              error: function(err, data) {
+                console.log(err, data);
+              }
+            });
+          }
+        });
+    </script>
 </body>
 </html>
