@@ -1,107 +1,107 @@
 <!DOCTYPE html>
 <html lang="ru">
-    <head>
-        <meta charset="utf-8">
-        <title>Registration</title>
-        <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
-        <script src="jquery-3.4.1.min.js"></script>
-        <script src="bootstrap.min.js"></script>
-        <link rel="stylesheet" type ="text/css" href="style.css">
-        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
-    </head>
-    <body>
-        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-            <span class="navbar-brand">TheProject</span>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav d-flex w-100">
-                    <a class="nav-item nav-link" href="/">Home</a>
-                    <a class="nav-item nav-link active" href="#">Register <span class="sr-only">(current)</span></a>
-                    <a class="nav-item nav-link" href="/login">Login</a>
-                    <div class="d-lg-flex ml-auto">
-                        <span class="d-flex navbar-text ml-auto">{{user}}</span>
-                        <a class="nav-item nav-link active ml-auto" href="/logout">Log out</a>
-                    </div>
+<head>
+    <meta charset="utf-8">
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <link rel="stylesheet" type ="text/css" href="style.css">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+        <span class="navbar-brand">TheProject</span>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav d-flex w-100">
+                <a class="nav-item nav-link" href="/">Home</a>
+                <a class="nav-item nav-link active" href="#">Register <span class="sr-only">(current)</span></a>
+                <a class="nav-item nav-link" href="/login">Login</a>
+                <div class="d-lg-flex ml-auto">
+                    <span class="d-flex navbar-text ml-auto">{{user}}</span>
+                    <a class="nav-item nav-link active ml-auto" href="/logout">Log out</a>
                 </div>
             </div>
-        </nav>
-        <div class="container-fluid">
-            <div class="d-flex h-100 w-100 justify-content-center align-items-center">
-                <div class="col-lg-6 col-xs-6 col-xs-12 d-flex flex-column align-items-center justify-content-center">
-                    <div>
-                        <h3>Registration</h3>
-                    </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text">@</span>
-                            </div>
-                            <label for="username"></label><input type="text" class="form-control" name="username" placeholder="Pick a nickname" id="username">
-                        </div>
-                        <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="fas fa-key"></i></span>
-                            </div>
-                            <label for="password"></label><input type="password" class="form-control" name="password" placeholder="Pick a password" id="password">
-                        </div>
-                        <div class="input-group mb-2">
-                            <label for="firstName"></label><input type="text" class="form-control" name="firstName" placeholder="Enter your first name" id="firstName">
-                        </div>
-                        <div class="input-group mb-2">
-                            <label for="lastName"></label><input type="text" class="form-control" name="lastName" placeholder="Enter your last name" id="lastName">
-                        </div>
-                        <div id="alert_placeholder">
-                        </div>
-                        <input type="submit" class="btn btn-primary" value="Submit" id="submit">
+        </div>
+    </nav>
+    <div class="container-fluid">
+        <div class="d-flex h-100 w-100 justify-content-center align-items-center">
+            <div class="col-lg-6 col-xs-12 d-flex flex-column align-items-center justify-content-center">
+                <div>
+                    <h3>Registration</h3>
                 </div>
-        </div>
-        </div>
-        <script>
-            $("#submit").click(function() {
-                const name = $("#username")[0].value;
-                const psswd = $("#password")[0].value;
-                const fname = $("#firstName")[0].value;
-                const lname = $("#lastName")[0].value;
-                if (name.length && password.length && fname.length && lname.length) {
-                    showAlert("alert-warning", "All fields are required");
-                } else {
-                    $(".alert").alert("close");
-                    $.ajax({
-                        url: "/regr",
-                        method: "POST",
-                        dataType: "json",
-                        data: {
-                            username: name,
-                            password: psswd,
-                            firstName: fname,
-                            lastName: lname
-                        },
-                        success: function(data) {
-                            if (data === 1) {
-                                showAlert("alert-success", "Registration successfull");
-                                setTimeout(reload, 1000);
-                            } else if (data === 0) {
-                                showAlert("alert-warning", "Such username already exists");
-                            } else {
-                                showAlert("alert-danger", "Nope :)");
-                            }
-                        },
-                        error: function() {
-                            showAlert("alert-danger", "Failed connection, check console")
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">@</span>
+                        </div>
+                        <label for="username"></label><input type="text" class="form-control" name="username" placeholder="Pick a nickname" id="username">
+                    </div>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-key"></i></span>
+                        </div>
+                        <label for="password"></label><input type="password" class="form-control" name="password" placeholder="Pick a password" id="password">
+                    </div>
+                    <div class="input-group mb-2">
+                        <label for="firstName"></label><input type="text" class="form-control" name="firstName" placeholder="Enter your first name" id="firstName">
+                    </div>
+                    <div class="input-group mb-2">
+                        <label for="lastName"></label><input type="text" class="form-control" name="lastName" placeholder="Enter your last name" id="lastName">
+                    </div>
+                    <div id="alert_placeholder">
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="Submit" id="submit">
+            </div>
+    </div>
+    </div>
+    <script>
+        $("#submit").click(function() {
+            const name = $("#username")[0].value;
+            const psswd = $("#password")[0].value;
+            const fname = $("#firstName")[0].value;
+            const lname = $("#lastName")[0].value;
+            if (name.length && password.length && fname.length && lname.length) {
+                showAlert("alert-warning", "All fields are required");
+            } else {
+                $(".alert").alert("close");
+                $.ajax({
+                    url: "/regr",
+                    method: "POST",
+                    dataType: "json",
+                    data: {
+                        username: name,
+                        password: psswd,
+                        firstName: fname,
+                        lastName: lname
+                    },
+                    success: function(data) {
+                        if (data === 1) {
+                            showAlert("alert-success", "Registration successfull");
+                            setTimeout(reload, 1000);
+                        } else if (data === 0) {
+                            showAlert("alert-warning", "Such username already exists");
+                        } else {
+                            showAlert("alert-danger", "Nope :)");
                         }
-                    })
-                }
-            });
-
-            function showAlert(alertClass, alertMessage) {
-                $("#alert_placeholder")[0].innerHTML = "\n\<div class=\"alert " + alertClass + "\" role=\"alert\">\n\<strong>" + alertMessage + "</strong>\n</div>"
+                    },
+                    error: function() {
+                        showAlert("alert-danger", "Failed connection, check console")
+                    }
+                })
             }
+        });
 
-            function reload() {
-                document.location.href = "/";
-            }
-        </script>
-    </body>
+        function showAlert(alertClass, alertMessage) {
+            $("#alert_placeholder")[0].innerHTML = "\n\<div class=\"alert " + alertClass + "\" role=\"alert\">\n\<strong>" + alertMessage + "</strong>\n</div>"
+        }
+
+        function reload() {
+            document.location.href = "/";
+        }
+    </script>
+</body>
 </html>
