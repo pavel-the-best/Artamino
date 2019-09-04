@@ -86,7 +86,7 @@
 
         getAllMessages();
 
-        function onclick() {
+        $("#sender").click(function() {
             const messageText = $("#message")[0].value;
             if (messageText) {
                 $.ajax({
@@ -104,13 +104,11 @@
                     }
                 });
             }
-        }
-
-        $("#sender").click(onclick());
+        });
 
         function keypress(key) {
             if (key.keyCode === 13) {
-                onclick();
+                $("#sender").click();
             }
         }
     </script>
