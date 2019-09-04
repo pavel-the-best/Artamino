@@ -10,6 +10,18 @@
     color: #ffffff;
 }
 
+.message {
+    background-color: #ffe748;
+    border-radius: 0.5em;
+    margin: 0.75em;
+    padding: 0.25em;
+    width: 25%;
+}
+
+#chat {
+    margin-bottom: 3em;
+}
+
 html, body, .container-fluid {
-	height: 100%
+	height: 100%;
 }

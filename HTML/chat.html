@@ -33,7 +33,7 @@
         <div class="flex-column w-100" id="chat">
         </div>
         <div class="input-group mb-1 fixed-bottom w-100">
-            <label for="message"></label><input autofoecus type="text" name="message" class="form-control p-1" value="" placeholder="Write a message" id="message">
+            <label for="message"></label><input type="text" name="message" class="form-control p-1" value="" placeholder="Write a message" onkeypress="keypress(event)" id="message" autofocus>
             <div class="input-group-prepend">
                 <div class="btn bg-primary" id="sender"><i class="fas fa-arrow-circle-right white"></i></div>
             </div>
@@ -64,8 +64,12 @@
             const chat = $("#chat");
             chat[0].innerHTML = "";
             for (let i in messages) {
-              chat.append("<div class=\"d-flex\">" + escape(messages[i].text) + "</div>");
+              let tag = "justify-content-begin";
+              if (messages[i].user._id === "{{user_id}}") tag = "justify-content-end";
+              chat.append("<div class=\"d-flex flex-row " + tag + "\"><div class=\"message\">" + escape(messages[i].user.firstName) + " " + escape(messages[i].user.lastName) + "<br>" + escape(messages[i].text) + "<a name=\"message" + i + "\"></a></div></div>");
             }
+            document.location.href = "#message" + (messages.length - 1);
+            $("#message")[0].focus();
         }
 
         function getAllMessages() {
@@ -75,30 +79,40 @@
             dataType: "json",
             success: function(data) {
               parseMessages(data);
+              setTimeout(getAllMessages, 500)
             }
           });
         }
 
         getAllMessages();
 
-        $("#sender").click(function() {
-          const messageText = $("#message")[0].value;
-          if (messageText) {
-            $.ajax({
-              url: "/createMessage",
-              method: "GET",
-              data: {
-                text: messageText
-              },
-              success: function() {
-                getAllMessages();
-              },
-              error: function(err, data) {
-                console.log(err, data);
-              }
-            });
-          }
-        });
+        function onclick() {
+            const messageText = $("#message")[0].value;
+            if (messageText) {
+                $.ajax({
+                    url: "/createMessage",
+                    method: "GET",
+                    data: {
+                        text: messageText
+                    },
+                    success: function() {
+                        getAllMessages();
+                        $("#message")[0].value = "";
+                    },
+                    error: function(err, data) {
+                        console.log(err, data);
+                    }
+                });
+            }
+        }
+
+        $("#sender").click(onclick());
+
+        function keypress(key) {
+            if (key.keyCode === 13) {
+                onclick();
+            }
+        }
     </script>
 </body>
 </html>

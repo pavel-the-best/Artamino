@@ -129,7 +129,7 @@ async function readContent(pathname, request, response) {
                 const userInfo = await user.checkCookie(request);
                 let args = {"user": "Not logged in"};
                 if (userInfo) {
-                    args = {"user": "Logged in as " + userInfo["username"]};
+                    args = {"user": "Logged in as " + userInfo["username"], "user_id": userInfo["_id"]};
                 }
                 const data = await reader.read("./HTML" + pathname + ".html", args);
                 response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
