@@ -110,7 +110,7 @@ async function logOut(request) {
 
 async function checkPassword(request, name, passwordToCheck) {
   try {
-    const loggedIn = await checkCookie(request);
+    const loggedIn = checkCookie(request);
     const user = await index.getCollection("auth", "user");
     const query = {
       username: name
@@ -121,8 +121,8 @@ async function checkPassword(request, name, passwordToCheck) {
       result = await bcrypt.compare(passwordToCheck, searchResult["password"]);
     }
     if (result) {
-      if (loggedIn) await logOut(request);
-      return await createSession(request, ObjectID(searchResult["_id]"]));
+      if (await loggedIn) await logOut(request);
+      return await createSession(request, ObjectID(searchResult["_id"]));
     } else {
       return 0;
     }

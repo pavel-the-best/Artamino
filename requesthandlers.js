@@ -1,125 +1,11 @@
 const url = require("url");
 const qs = require("querystring");
+const path = require("path");
 const user = require("./user.js");
 const reader = require("./reader.js");
 const chatter = require("./chat.js");
 const error = require("./error.js");
 
-async function start(request, response) {
-  try {
-    const userInfo = await user.checkCookie(request);
-    let args = {"user": "Not logged in"};
-    if (userInfo) {
-      args = {"user": "Logged in as " + userInfo["username"]};
-    }
-    const data = await reader.read("./HTML/index.html", args);
-    response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    await error.writeHTMLError(500, response);
-    console.error(err);
-  }
-}
-
-async function style(request, response) {
-  try {
-    const data = await reader.read("./static/style.css");
-    response.writeHead(200, {"Content-Type": "text/css", "Cache-Control": "public, max-age=3600"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    error.writeError(500, response);
-    console.error(err);
-  }
-}
-
-async function register(request, response) {
-  try {
-    const userInfo = await user.checkCookie(request);
-    let args = {"user": "Not logged in"};
-    if (userInfo) {
-      args = {"user": "Logged in as " + userInfo["username"]};
-    }
-    const data = await reader.read("./HTML/regr.html", args);
-    response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    await error.writeHTMLError(500, response);
-    console.error(err);
-  }
-}
-
-async function login(request, response) {
-  try {
-    const userInfo = await user.checkCookie(request);
-    let args = {"user": "Not logged in"};
-    if (userInfo) {
-      args = {"user": "Logged in as " + userInfo["username"]};
-    }
-    const data = await reader.read("./HTML/logn.html", args);
-    response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    error.writeError(500, response);
-    console.error(err);
-  }
-}
-
-async function chat(request, response) {
-  try {
-    const userInfo = await user.checkCookie(request);
-    let args = {"user": "Not logged in"};
-    if (userInfo) {
-      args = {"user": "Logged in as " + userInfo["username"]};
-    }
-    const data = await reader.read("./HTML/chat.html", args);
-    response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    error.writeError(500, response);
-    console.error(err);
-  }
-}
-
-async function bootstrapCSS(request, response) {
-  try {
-    const data = await reader.read("./static/bootstrap.min.css");
-    response.writeHead(200, {"Content-Type": "text/css", "Cache-Control": "public, max-age=31536000"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    error.writeError(500, response);
-    console.error(err);
-  }
-}
-
-async function bootstrapJS(request, response) {
-  try {
-    const data = await reader.read("./static/bootstrap.min.js");
-    response.writeHead(200, {"Content-Type": "text/js", "Cache-Control": "public, max-age=31536000"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    error.writeError(500, response);
-    console.error(err);
-  }
-}
-
-async function Jquery(request, response) {
-  try {
-    const data = await reader.read("./static/jquery-3.4.1.min.js");
-    response.writeHead(200, {"Content-Type": "text/js", "Cache-Control": "public, max-age=31536000"});
-    response.write(data);
-    response.end();
-  } catch (err) {
-    error.writeError(500, response);
-    console.error(err);
-  }
-}
 
 function regr(request, response) {
   let data = "";
@@ -233,16 +119,46 @@ async function getAllMessages(request, response) {
   }
 }
 
-exports.start = start;
-exports.style = style;
-exports.register = register;
-exports.login = login;
-exports.chat = chat;
-exports.bootstrapCSS = bootstrapCSS;
-exports.bootstrapJS = bootstrapJS;
-exports.Jquery = Jquery;
+async function readContent(pathname, request, response) {
+    try {
+        if (pathname === "/") {
+            pathname = "/index";
+        }
+        const HTMLRes = await reader.fileExists("./HTML" + pathname + ".html");
+        if (HTMLRes) {
+                const userInfo = await user.checkCookie(request);
+                let args = {"user": "Not logged in"};
+                if (userInfo) {
+                    args = {"user": "Logged in as " + userInfo["username"]};
+                }
+                const data = await reader.read("./HTML" + pathname + ".html", args);
+                response.writeHead(200, {"Content-Type": "text/html", "Cache-Control": "no-cache, no-store"});
+                response.write(data);
+                response.end();
+        } else {
+            const staticRes = await reader.fileExists("./static" + pathname);
+            if (staticRes) {
+                const data = await reader.read("./static" + pathname);
+                let extname = path.extname(pathname).substring(1);
+                if (extname === "js") {
+                    extname = "javascript"
+                }
+                response.writeHead(200, { "Content-Type": "text/" + extname, "Cache-Control": "public, max-age=3600" });
+                response.write(data);
+                response.end();
+            } else {
+                await error.writeHTMLError(404, response);
+            }
+        }
+    } catch(err) {
+        error.writeError(500, response);
+        console.error(err);
+    }
+}
+
 exports.regr = regr;
 exports.logn = logn;
 exports.logOut = logOut;
 exports.createMessage = createMessage;
 exports.getAllMessages = getAllMessages;
+exports.readContent = readContent;

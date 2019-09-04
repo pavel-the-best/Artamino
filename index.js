@@ -4,15 +4,6 @@ const requestHandlers = require("./requesthandlers.js");
 const MongoClient = require("mongodb").MongoClient;
 
 let handle = {};
-handle["/"] = requestHandlers.start;
-handle["/start"] = requestHandlers.start;
-handle["/style.css"] = requestHandlers.style;
-handle["/register"] = requestHandlers.register;
-handle["/login"] = requestHandlers.login;
-handle["/chat"] = requestHandlers.chat;
-handle["/bootstrap.min.css"] = requestHandlers.bootstrapCSS;
-handle["/bootstrap.min.js"] = requestHandlers.bootstrapJS;
-handle["/jquery-3.4.1.min.js"] = requestHandlers.Jquery;
 handle["/regr"] = requestHandlers.regr;
 handle["/logn"] = requestHandlers.logn;
 handle["/logout"] = requestHandlers.logOut;

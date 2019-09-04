@@ -2,10 +2,20 @@ const util = require("util");
 const fs = require("fs");
 const escaper = require("./escaper.js");
 
-const readFile = util.promisify(fs.readFile);
+const fsReadFile = util.promisify(fs.readFile);
+const fsAccess = util.promisify(fs.access);
 
-async function read(fileName, args = {}) {
-  let data = await readFile(fileName);
+async function fileExists(filePath) {
+  try {
+    await fsAccess(filePath);
+    return true;
+  } catch(err) {
+    return false;
+  }
+}
+
+async function read(filePath, args = {}) {
+  let data = await fsReadFile(filePath);
   data = data.toString();
   for (let arg in args) {
     args[arg] = escaper.escape(args[arg]);
@@ -17,3 +27,4 @@ async function read(fileName, args = {}) {
 }
 
 exports.read = read;
+exports.fileExists = fileExists;
