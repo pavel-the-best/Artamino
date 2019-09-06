@@ -60,16 +60,24 @@
             return string;
         }
 
-      function parseMessages(messages) {
+        let count = 0;
+        let lastTime = 0;
+
+        function parseMessages(messages) {
             const chat = $("#chat");
-            chat[0].innerHTML = "";
             for (let i in messages) {
-              let tag = "justify-content-begin";
-              if (messages[i].user._id === "{{user_id}}") tag = "justify-content-end";
-              chat.append("<div class=\"d-flex flex-row " + tag + "\"><div class=\"message\">" + escape(messages[i].user.firstName) + " " + escape(messages[i].user.lastName) + "<br>" + escape(messages[i].text) + "<a name=\"message" + i + "\"></a></div></div>");
+                if (messages[i].created > lastTime) {
+                    let tag = "justify-content-begin";
+                    if (messages[i].user._id === "{{user_id}}") tag = "justify-content-end";
+                    chat.append("<div class=\"d-flex flex-row " + tag + "\"><div class=\"message\">" + escape(messages[i].user.firstName) + " " + escape(messages[i].user.lastName) + "<br>" + escape(messages[i].text) + "<a name=\"message" + count + "\"></a></div></div>");
+                    ++count;
+                }
             }
-            document.location.href = "#message" + (messages.length - 1);
-            $("#message")[0].focus();
+            if (messages.length) {
+                document.location.href = "#message" + (count - 1);
+                lastTime = messages[messages.length - 1].created;
+                $("#message")[0].focus();
+            }
         }
 
         function getAllMessages() {
@@ -79,9 +87,24 @@
             dataType: "json",
             success: function(data) {
               parseMessages(data);
-              setTimeout(getAllMessages, 500)
+              setTimeout(getMessages, 500);
             }
           });
+        }
+
+        function getMessages() {
+            $.ajax({
+                url: "/getMessages",
+                method: "GET",
+                dataType: "json",
+                data: {
+                    lastMessage: lastTime
+                },
+                success: function(data) {
+                    parseMessages(data);
+                    setTimeout(getMessages, 500);
+                }
+            })
         }
 
         getAllMessages();
@@ -96,7 +119,7 @@
                         text: messageText
                     },
                     success: function() {
-                        getAllMessages();
+                        getMessages();
                         $("#message")[0].value = "";
                     },
                     error: function(err, data) {

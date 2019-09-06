@@ -9,6 +9,7 @@ handle["/logn"] = requestHandlers.logn;
 handle["/logout"] = requestHandlers.logOut;
 handle["/createMessage"] = requestHandlers.createMessage;
 handle["/getAllMessages"] = requestHandlers.getAllMessages;
+handle["/getMessages"] = requestHandlers.getMessages;
 
 const host = process.env.HOST || "0.0.0.0";
 const port = process.env.PORT || 8080;

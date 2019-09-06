@@ -31,7 +31,6 @@ async function getAllMessages(request) {
     const userList = await authUser.find().toArray();
     const userDict = {};
     for (let i in userList) {
-      delete userList[i].password;
       userDict[userList[i]["_id"]] = {
         _id: userList[i]["_id"],
         username: userList[i]["username"],
@@ -47,16 +46,45 @@ async function getAllMessages(request) {
   }
 }
 
-function parseMessages(messages, userDict) {
+async function getMessages(request, lastTime) {
   try {
-    for (let i in messages) {
-      messages[i] = {
-        text: messages[i]["text"],
-        user: userDict[messages[i]["user_id"]],
-        created: ObjectID(messages[i]["_id"]).getTimestamp().getTime()
+    const userInfo = await user.checkCookie(request);
+    if (!userInfo) {
+      return [0, []];
+    }
+    let message = index.getCollection("message", "message");
+    const authUser = await index.getCollection("auth", "user");
+    const userList = await authUser.find().toArray();
+    const userDict = {};
+    for (let i in userList) {
+      userDict[userList[i]["_id"]] = {
+        _id: userList[i]["_id"],
+        username: userList[i]["username"],
+        firstName: userList[i]["first_name"],
+        lastName: userList[i]["last_name"]
       };
     }
-    return messages;
+    message = await message;
+    const messages = await message.find().toArray();
+    return [1, parseMessages(messages, userDict, lastTime)];
+  } catch(err) {
+    throw err;
+  }
+}
+
+function parseMessages(messages, userDict, lastTime = 0) {
+  try {
+    let newMessages = [];
+    for (let i in messages) {
+      if (ObjectID(messages[i]["_id"]).getTimestamp().getTime() > lastTime) {
+        newMessages.push({
+          text: messages[i]["text"],
+          user: userDict[messages[i]["user_id"]],
+          created: ObjectID(messages[i]["_id"]).getTimestamp().getTime()
+        });
+      }
+    }
+    return newMessages;
   } catch(err) {
     throw err;
   }
@@ -64,3 +92,4 @@ function parseMessages(messages, userDict) {
 
 exports.createMessage = createMessage;
 exports.getAllMessages = getAllMessages;
+exports.getMessages = getMessages;

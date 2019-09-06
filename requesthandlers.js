@@ -107,8 +107,8 @@ async function getAllMessages(request, response) {
   try {
     const messages = await chatter.getAllMessages(request);
     if (messages[0]) {
-      response.writeHead(200, {"Content-Type": "text/plain", "Cache-Control": "no-cache, no-store"});
-      response.write(JSON.stringify(messages[1], '\n', '  '));
+      response.writeHead(200, {"Content-Type": "application/json", "Cache-Control": "no-cache, no-store"});
+      response.write(JSON.stringify(messages[1]));
       response.end();
     } else {
       error.writeError(401, response);
@@ -117,6 +117,35 @@ async function getAllMessages(request, response) {
     error.writeError(500, response);
     console.error(err);
   }
+}
+
+async function getMessages(request, response) {
+    try {
+        if (request.method === "GET") {
+            const query = qs.parse(url.parse(request.url).query);
+            if ("lastMessage" in query) {
+                if (parseInt(query["lastMessage"])) {
+                    const messages = await chatter.getMessages(request, parseInt(query["lastMessage"]));
+                    if (messages[0]) {
+                        response.writeHead(200, {"Content-Type": "application/json"});
+                        response.write(JSON.stringify(messages[1]));
+                        response.end();
+                    } else {
+                        error.writeError(401, response);
+                    }
+                } else {
+                    error.writeError(400, response);
+                }
+            } else {
+                error.writeError(400, response);
+            }
+        } else {
+            error.writeError(400, response);
+        }
+    } catch(err) {
+        error.writeError(500, response);
+        console.error(error);
+    }
 }
 
 async function readContent(pathname, request, response) {
@@ -161,4 +190,5 @@ exports.logn = logn;
 exports.logOut = logOut;
 exports.createMessage = createMessage;
 exports.getAllMessages = getAllMessages;
+exports.getMessages = getMessages;
 exports.readContent = readContent;
