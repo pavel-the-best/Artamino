@@ -4,8 +4,10 @@ const fs = require("fs");
 const url = require("url");
 const router = require("./router.js");
 
+let options = {};
+
 if (!process.env.DEBUG) {
-  const options = {
+  options = {
     key: fs.readFileSync("/etc/letsencrypt/live/pavelthebest.cf/privkey.pem", "utf8"),
     cert: fs.readFileSync("/etc/letsencrypt/live/pavelthebest.cf/fullchain.pem", "utf8")
   };
