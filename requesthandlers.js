@@ -147,14 +147,7 @@ async function readContent(pathname, request, response) {
                 response.write(data);
                 response.end();
             } else {
-                if (pathname === "/.well-known/acme-challenge/KXySdGwtBnRTkrCeITJKJ_L1grMBzd8d37OvfHwYKA8") {
-                    const data = "KXySdGwtBnRTkrCeITJKJ_L1grMBzd8d37OvfHwYKA8._BW72UgZpErOu5PQgXdMGF06euZJRMPBfndqaQNNru4";
-                    response.writeHead(200, {"Content-Type": "text/plain"});
-                    response.write(data);
-                    response.end();
-                } else {
-                    await error.writeHTMLError(404, response);
-                }
+                await error.writeHTMLError(404, response);
             }
         }
     } catch(err) {
