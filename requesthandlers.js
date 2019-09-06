@@ -124,7 +124,7 @@ async function getMessages(request, response) {
         if (request.method === "GET") {
             const query = qs.parse(url.parse(request.url).query);
             if ("lastMessage" in query) {
-                if (parseInt(query["lastMessage"])) {
+                if (!isNaN(parseInt(query["lastMessage"]))) {
                     const messages = await chatter.getMessages(request, parseInt(query["lastMessage"]));
                     if (messages[0]) {
                         response.writeHead(200, {"Content-Type": "application/json"});

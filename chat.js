@@ -13,7 +13,7 @@ async function createMessage(request, text) {
     const query = {
       text: text,
       user_id: ObjectID(userInfo._id),
-      created: now.getMilliseconds()
+      created: now.getTime()
     };
     await message.insertOne(query);
     return 1;
