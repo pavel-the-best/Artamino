@@ -4,7 +4,7 @@
   "description": "Мы не знаем, что мы делаем.\r Мы не знаем, зачем мы это делаем.\r Но мы просто делаем это.",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js && mongod --dbpath ~/db"
   },
   "engines": {
     "node": "10.15.0",
@@ -26,7 +26,8 @@
     "fs": "0.0.1-security",
     "html": "^1.0.0",
     "http": "0.0.0",
-    "mongodb": "^3.2.7",
+    "http2": "^3.3.7",
+    "mongodb": "^3.3.2",
     "node": "^12.6.0",
     "node-gyp": "^5.0.2",
     "node-pre-gyp": "^0.13.0",
