@@ -153,6 +153,15 @@ async function readContent(pathname, request, response) {
         if (pathname === "/") {
             pathname = "/index";
         }
+        res = ""
+        for (let i in pathname) {
+            if (pathname[i] === "/") {
+                res = "/"
+            } else {
+                res += pathname[i]
+            }
+        }
+        pathname = res
         const HTMLRes = await reader.fileExists("./HTML" + pathname + ".html");
         if (HTMLRes) {
                 const userInfo = await user.checkCookie(request);

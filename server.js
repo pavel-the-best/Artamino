@@ -1,3 +1,4 @@
+const http2 = require("http2");
 const https = require("https");
 const http = require("http");
 const fs = require("fs");
@@ -22,13 +23,17 @@ function startServer(route, handle, host, port) {
     await router.route(pathname, handle, request, response);
   }
 
-  const server = http.createServer(onRequest);
-  server.listen(port, host);
-  if (!process.env.DEBUG) {
-    const secureServer = https.createServer(options, onRequest);
-    secureServer.listen(9443, host);
+  try {
+    const server = http.createServer(onRequest);
+    server.listen(port, host);
+    if (!process.env.DEBUG) {
+      const secureServer = https.createServer(options, onRequest);
+      secureServer.listen(9443, host);
+    }
+    console.log("Server started successfully. Listening requests on  " + host + ":" + port + ".");
+  } catch(err) {
+    throw err;
   }
-  console.log("Server started successfully. Listening requests on  " + host + ":" + port + ".");
 }
 
 exports.startServer = startServer;
