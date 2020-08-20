@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/pavel-the-best/SomeThing#readme",
   "dependencies": {
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "fs": "0.0.1-security",
     "html": "^1.0.0",
     "http": "0.0.0",
